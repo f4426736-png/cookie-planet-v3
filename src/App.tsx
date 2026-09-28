@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { Pause, Play } from 'lucide-react';
 import { ToonhubHero } from './components/ToonhubHero';
 import { InfiniteMarquee } from './components/ViktorHero';
 import { TestimonialCarousel } from './components/TestimonialCarousel';
@@ -11,7 +12,12 @@ import { CookiePage } from './components/CookiePage';
 import { COOKIE_DETAILS } from './components/CookieDetailModal';
 import PrmptExperience from './components/PrmptExperience';
 
-const DEFAULT_VIDEO = 'https://res.cloudinary.com/yxbhso8s/video/upload/v1790444492/GALLETA_DE_VARIOS_SABORES_compressed_1.mp4';
+// Cloudinary streaming optimizado para web background:
+// w_1280 (720p es ideal para fondos fluidos sin saturar buffer ni memoria)
+// q_auto:eco (compresión ligera que no pixela pero baja el bitrate a <1.2 Mbps)
+// f_mp4 con vc_h264 para máxima fluidez y soporte nativo sin pausas por transcoding
+const DEFAULT_VIDEO = 'https://res.cloudinary.com/yxbhso8s/video/upload/w_1280,q_auto:eco,vc_h264,f_mp4/v1790444492/GALLETA_DE_VARIOS_SABORES_compressed_1.mp4';
+const FALLBACK_VIDEO_MP4 = 'https://res.cloudinary.com/yxbhso8s/video/upload/w_1280,q_auto:eco/v1790444492/GALLETA_DE_VARIOS_SABORES_compressed_1.mp4';
 const DB_NAME = 'securify_media_db';
 const DB_VERSION = 1;
 const STORE_NAME = 'videos';
@@ -106,8 +112,20 @@ export default function App() {
   const [submitted, setSubmitted] = useState(false);
   const [activeTab, setActiveTab] = useState<string | null>(null);
   const [inputError, setInputError] = useState<string | null>(null);
+  const [isHeroPaused, setIsHeroPaused] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  const toggleHeroPlayPause = () => {
+    if (videoRef.current) {
+      if (videoRef.current.paused) {
+        videoRef.current.play().then(() => setIsHeroPaused(false)).catch(() => {});
+      } else {
+        videoRef.current.pause();
+        setIsHeroPaused(true);
+      }
+    }
+  };
 
   // Sync hash routing for #merch, #/about, #/contactanos, and cookie pages
   useEffect(() => {
@@ -203,12 +221,12 @@ export default function App() {
   // Load saved video from IndexedDB or localStorage on start if desired, default is the new compressed video
   useEffect(() => {
     async function initVideo() {
-      // By default use the new high-performance compressed Cloudinary video
+      // By default use the new high-performance compressed Cloudinary video with GPU stream
       const savedVersion = localStorage.getItem('securify_video_version');
-      if (savedVersion !== 'v2_cloudinary') {
+      if (savedVersion !== 'v4_720p_smooth') {
         await clearVideoFileFromDB();
         localStorage.removeItem('securify_bg_video');
-        localStorage.setItem('securify_video_version', 'v2_cloudinary');
+        localStorage.setItem('securify_video_version', 'v4_720p_smooth');
         setVideoSrc(DEFAULT_VIDEO);
         return;
       }
@@ -389,16 +407,20 @@ export default function App() {
     <div className="relative min-h-screen w-full bg-black text-white">
       {/* Hero section */}
       <section className="relative h-screen w-full overflow-hidden bg-black select-none">
-        {/* Background video */}
+        {/* Background video optimized for smooth streaming */}
         <video
           ref={videoRef}
           key={videoSrc}
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover transform-gpu will-change-transform"
+          style={{ transform: 'translateZ(0)' }}
           autoPlay
           loop
           muted
           playsInline
           preload="auto"
+          disablePictureInPicture
+          onPlay={() => setIsHeroPaused(false)}
+          onPause={() => setIsHeroPaused(true)}
           onEnded={(e) => {
             const el = e.currentTarget;
             el.currentTime = 0;
@@ -430,66 +452,79 @@ export default function App() {
           </h1>
         </div>
 
-        {/* Floating Internal Windows badge cards (Merch, Forma & Orbis) - positioned neatly on top-right */}
-        <div className="absolute right-6 sm:right-10 md:right-14 top-20 sm:top-24 pointer-events-auto flex flex-col sm:flex-row gap-3 z-20">
-          <a
-            href="#/merch"
-            className="liquid-glass group flex items-center gap-3 px-4 py-2.5 rounded-2xl border border-white/20 hover:border-amber-400/50 transition-all cursor-pointer shadow-2xl hover:scale-105"
-          >
-            <div className="w-7 h-7 rounded-full bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-300 font-bold">
-              <span className="font-sans text-[11px] font-black uppercase">MR</span>
-            </div>
-            <div className="text-left">
-              <div className="flex items-center gap-1.5">
-                <span className="font-medium text-xs text-white tracking-wider">
-                  Merch
-                </span>
-                <span className="text-[9px] font-mono text-amber-300 uppercase">
-                  [#/merch]
-                </span>
+        {/* Floating Internal Windows badge cards (Merch, Forma & Orbis) + Apple Play/Pause button on top-right */}
+        <div className="absolute right-6 sm:right-10 md:right-14 top-20 sm:top-24 pointer-events-auto flex items-center gap-3 z-20">
+          <div className="flex flex-col sm:flex-row gap-3">
+            <a
+              href="#/merch"
+              className="liquid-glass group flex items-center gap-3 px-4 py-2.5 rounded-2xl border border-white/20 hover:border-amber-400/50 transition-all cursor-pointer shadow-2xl hover:scale-105"
+            >
+              <div className="w-7 h-7 rounded-full bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-300 font-bold">
+                <span className="font-sans text-[11px] font-black uppercase">MR</span>
               </div>
-            </div>
-          </a>
+              <div className="text-left">
+                <div className="flex items-center gap-1.5">
+                  <span className="font-medium text-xs text-white tracking-wider">
+                    Merch
+                  </span>
+                  <span className="text-[9px] font-mono text-amber-300 uppercase">
+                    [#/merch]
+                  </span>
+                </div>
+              </div>
+            </a>
 
-          <a
-            href="#/contactanos"
-            className="liquid-glass group flex items-center gap-3 px-4 py-2.5 rounded-2xl border border-white/20 hover:border-blue-400/50 transition-all cursor-pointer shadow-2xl hover:scale-105"
-          >
-            <div className="w-7 h-7 rounded-full bg-blue-500/20 border border-blue-400/40 flex items-center justify-center text-white font-bold">
-              <svg viewBox="0 0 256 256" className="w-3.5 h-3.5 fill-current" xmlns="http://www.w3.org/2000/svg">
-                <path d="M 256 256 L 128 256 L 0 128 L 128 128 Z M 256 128 L 128 128 Z" />
-              </svg>
-            </div>
-            <div className="text-left">
-              <div className="flex items-center gap-1.5">
-                <span className="font-medium text-xs text-white tracking-wider">
-                  Contáctanos
-                </span>
-                <span className="text-[9px] font-mono text-blue-400 uppercase">
-                  [#/contactanos]
-                </span>
+            <a
+              href="#/contactanos"
+              className="liquid-glass group flex items-center gap-3 px-4 py-2.5 rounded-2xl border border-white/20 hover:border-blue-400/50 transition-all cursor-pointer shadow-2xl hover:scale-105"
+            >
+              <div className="w-7 h-7 rounded-full bg-blue-500/20 border border-blue-400/40 flex items-center justify-center text-white font-bold">
+                <svg viewBox="0 0 256 256" className="w-3.5 h-3.5 fill-current" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M 256 256 L 128 256 L 0 128 L 128 128 Z M 256 128 L 128 128 Z" />
+                </svg>
               </div>
-            </div>
-          </a>
+              <div className="text-left">
+                <div className="flex items-center gap-1.5">
+                  <span className="font-medium text-xs text-white tracking-wider">
+                    Contáctanos
+                  </span>
+                  <span className="text-[9px] font-mono text-blue-400 uppercase">
+                    [#/contactanos]
+                  </span>
+                </div>
+              </div>
+            </a>
 
-          <a
-            href="#/about"
-            className="liquid-glass group flex items-center gap-3 px-4 py-2.5 rounded-2xl border border-white/20 hover:border-[#6FFF00]/50 transition-all cursor-pointer shadow-2xl hover:scale-105"
-          >
-            <div className="w-7 h-7 rounded-full bg-[#6FFF00]/20 border border-[#6FFF00]/40 flex items-center justify-center text-[#6FFF00]">
-              <span className="font-grotesk text-xs uppercase">AB</span>
-            </div>
-            <div className="text-left">
-              <div className="flex items-center gap-1.5">
-                <span className="font-grotesk text-xs text-white uppercase tracking-wider">
-                  About
-                </span>
-                <span className="text-[9px] font-mono text-[#6FFF00] uppercase">
-                  [#/about]
-                </span>
+            <a
+              href="#/about"
+              className="liquid-glass group flex items-center gap-3 px-4 py-2.5 rounded-2xl border border-white/20 hover:border-[#6FFF00]/50 transition-all cursor-pointer shadow-2xl hover:scale-105"
+            >
+              <div className="w-7 h-7 rounded-full bg-[#6FFF00]/20 border border-[#6FFF00]/40 flex items-center justify-center text-[#6FFF00]">
+                <span className="font-grotesk text-xs uppercase">AB</span>
               </div>
-            </div>
-          </a>
+              <div className="text-left">
+                <div className="flex items-center gap-1.5">
+                  <span className="font-grotesk text-xs text-white uppercase tracking-wider">
+                    About
+                  </span>
+                  <span className="text-[9px] font-mono text-[#6FFF00] uppercase">
+                    [#/about]
+                  </span>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          {/* Botón de Pausa / Play idéntico al de las ventanas internas de galletas */}
+          <button
+            type="button"
+            onClick={toggleHeroPlayPause}
+            className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur-md border border-white/20 hover:border-white/40 text-white/90 hover:text-white flex items-center justify-center transition-all cursor-pointer shadow-lg hover:scale-105 shrink-0"
+            aria-label={isHeroPaused ? 'Reproducir video' : 'Pausar video'}
+            title={isHeroPaused ? 'Reproducir video' : 'Pausar video'}
+          >
+            {isHeroPaused ? <Play size={18} className="translate-x-0.5" /> : <Pause size={18} />}
+          </button>
         </div>
 
         {/* Bottom subtle gradient overlay */}

@@ -85,21 +85,24 @@ export default function GalleryGrid() {
         }
       }
 
+      // Optimización de rendimiento: calcular escala relativa sin layout thrashing forzado
       cardElementsRef.current.forEach((card) => {
         if (!card) return;
         const rect = card.getBoundingClientRect();
         const top = rect.top;
         const bottom = rect.bottom;
 
-        if (bottom <= 0 || top >= vh) {
-          card.style.transform = 'scale(0)';
+        if (bottom <= -50 || top >= vh + 50) {
+          if (card.style.transform !== 'scale(0)') {
+            card.style.transform = 'scale(0)';
+          }
           return;
         }
 
         const enter = Math.min(1, (vh - top) / (vh * 0.6));
         const exit = Math.min(1, bottom / (vh * 0.4));
         const scale = Math.max(0, Math.min(enter, exit));
-        card.style.transform = `scale(${scale.toFixed(4)})`;
+        card.style.transform = `scale3d(${scale.toFixed(3)}, ${scale.toFixed(3)}, 1)`;
       });
 
       const outroStart = vh + maxScroll;

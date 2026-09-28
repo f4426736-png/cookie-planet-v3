@@ -12,8 +12,7 @@ export default function CustomCursor() {
     if (!cursor) return;
 
     const handleMouseMove = (e: MouseEvent) => {
-      cursor.style.left = `${e.clientX}px`;
-      cursor.style.top = `${e.clientY}px`;
+      cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
       cursor.style.opacity = '1';
     };
 
@@ -34,9 +33,8 @@ export default function CustomCursor() {
     <div
       ref={cursorRef}
       id="custom-cursor"
-      className="fixed pointer-events-none z-50 opacity-0 transition-opacity duration-200 hidden lg:block"
+      className="fixed top-0 left-0 pointer-events-none z-50 opacity-0 transition-opacity duration-150 will-change-transform hidden lg:block"
       style={{
-        transform: 'translate(-50%, -50%)',
         mixBlendMode: 'exclusion',
       }}
       aria-hidden="true"
