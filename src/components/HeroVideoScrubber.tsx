@@ -1,118 +1,27 @@
 import { useEffect, useRef, useState } from 'react';
 import { VIDEO_LEFT_URL, VIDEO_RIGHT_URL } from '../data/prmptData';
 
-const TOTAL_FRAMES = 45; // 45 frames por lado para respuesta 120 FPS sin latencia
-
 export default function HeroVideoScrubber() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const leftVideoRef = useRef<HTMLVideoElement>(null);
+  const rightVideoRef = useRef<HTMLVideoElement>(null);
 
-  // Buffers de frames precargados en memoria RAM
-  const leftFramesRef = useRef<ImageBitmap[]>([]);
-  const rightFramesRef = useRef<ImageBitmap[]>([]);
+  const [leftReady, setLeftReady] = useState(false);
+  const [rightReady, setRightReady] = useState(false);
 
-  const [isReady, setIsReady] = useState(false);
   const activeSideRef = useRef<'left' | 'right'>('right');
 
   useEffect(() => {
-    let isCancelled = false;
+    const isTouch =
+      window.matchMedia('(pointer: coarse)').matches ||
+      'ontouchstart' in window ||
+      window.innerWidth < 1024;
 
-    // Extractor de fotogramas a ImageBitmap mediante canvas offscreen de alta velocidad
-    const extractFramesFromVideo = async (url: string): Promise<ImageBitmap[]> => {
-      return new Promise((resolve) => {
-        const video = document.createElement('video');
-        video.src = url;
-        video.crossOrigin = 'anonymous';
-        video.muted = true;
-        video.playsInline = true;
-        video.preload = 'auto';
+    const leftVideo = leftVideoRef.current;
+    const rightVideo = rightVideoRef.current;
+    if (!leftVideo || !rightVideo) return;
 
-        const frames: ImageBitmap[] = [];
-
-        video.onloadedmetadata = async () => {
-          const duration = video.duration || 2.5;
-          const w = 960; // Resolución optimizada para renderizado retina instantáneo
-          const h = Math.round((video.videoHeight / video.videoWidth) * w) || 540;
-
-          const offscreenCanvas = document.createElement('canvas');
-          offscreenCanvas.width = w;
-          offscreenCanvas.height = h;
-          const ctx = offscreenCanvas.getContext('2d', { alpha: false });
-
-          const step = duration / (TOTAL_FRAMES - 1);
-
-          for (let i = 0; i < TOTAL_FRAMES; i++) {
-            if (isCancelled) break;
-            const targetTime = i * step;
-
-            await new Promise<void>((res) => {
-              const onSeeked = async () => {
-                video.removeEventListener('seeked', onSeeked);
-                if (ctx) {
-                  ctx.drawImage(video, 0, 0, w, h);
-                  try {
-                    const bitmap = await createImageBitmap(offscreenCanvas);
-                    frames.push(bitmap);
-                  } catch {
-                    // Fallback
-                  }
-                }
-                res();
-              };
-              video.addEventListener('seeked', onSeeked);
-              video.currentTime = targetTime;
-            });
-          }
-
-          resolve(frames);
-        };
-
-        video.onerror = () => {
-          resolve([]);
-        };
-      });
-    };
-
-    const loadAll = async () => {
-      // Extraemos ambos en paralelo
-      const [left, right] = await Promise.all([
-        extractFramesFromVideo(VIDEO_LEFT_URL),
-        extractFramesFromVideo(VIDEO_RIGHT_URL),
-      ]);
-
-      if (isCancelled) return;
-
-      leftFramesRef.current = left;
-      rightFramesRef.current = right;
-      setIsReady(true);
-    };
-
-    loadAll();
-
-    return () => {
-      isCancelled = true;
-    };
-  }, []);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d', { alpha: false });
-    if (!ctx) return;
-
-    // Ajustar resolución retina
-    const resizeCanvas = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const w = window.innerWidth;
-      const h = window.innerHeight;
-      canvas.width = w * dpr;
-      canvas.height = h * dpr;
-      ctx.scale(dpr, dpr);
-    };
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-
-    // Ocultar si baja más del 100vh
+    // Control de visibilidad con el scroll (más de 100vh se oculta para ahorrar GPU)
     const handleScroll = () => {
       const vh = window.innerHeight;
       const scrollY = window.scrollY || window.pageYOffset;
@@ -122,103 +31,186 @@ export default function HeroVideoScrubber() {
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
 
-    let targetLeftProgress = 0;
-    let targetRightProgress = 0;
-    let currentLeftProgress = 0;
-    let currentRightProgress = 0;
+    // En dispositivos móviles touch: reproduce en bucle alternado
+    if (isTouch) {
+      leftVideo.style.display = 'block';
+      leftVideo.style.opacity = '1';
+      rightVideo.style.display = 'none';
+
+      leftVideo.muted = true;
+      leftVideo.playsInline = true;
+      rightVideo.muted = true;
+      rightVideo.playsInline = true;
+
+      leftVideo.play().catch(() => {});
+
+      const onLeftEnded = () => {
+        leftVideo.style.display = 'none';
+        rightVideo.style.display = 'block';
+        rightVideo.style.opacity = '1';
+        rightVideo.currentTime = 0;
+        rightVideo.play().catch(() => {});
+      };
+
+      const onRightEnded = () => {
+        rightVideo.style.display = 'none';
+        leftVideo.style.display = 'block';
+        leftVideo.style.opacity = '1';
+        leftVideo.currentTime = 0;
+        leftVideo.play().catch(() => {});
+      };
+
+      leftVideo.addEventListener('ended', onLeftEnded);
+      rightVideo.addEventListener('ended', onRightEnded);
+
+      return () => {
+        window.removeEventListener('scroll', handleScroll);
+        leftVideo.removeEventListener('ended', onLeftEnded);
+        rightVideo.removeEventListener('ended', onRightEnded);
+      };
+    }
+
+    // DESKTOP: Modo Scrubber interactivo inmediato
+    leftVideo.muted = true;
+    leftVideo.playsInline = true;
+    leftVideo.pause();
+    leftVideo.style.display = 'block';
+    leftVideo.style.opacity = '0';
+
+    rightVideo.muted = true;
+    rightVideo.playsInline = true;
+    rightVideo.pause();
+    rightVideo.style.display = 'block';
+    rightVideo.style.opacity = '1';
+
+    let targetLeft = 0;
+    let targetRight = 0;
+    let currentLeft = 0;
+    let currentRight = 0;
     let rafId: number;
 
     const handleMouseMove = (e: MouseEvent) => {
       const width = window.innerWidth;
       const centerX = width / 2;
       const mouseX = e.clientX;
-      const deadZone = Math.max(30, width * 0.035);
+      const deadZone = Math.max(30, width * 0.04);
 
       if (Math.abs(mouseX - centerX) <= deadZone) {
-        targetLeftProgress = 0;
-        targetRightProgress = 0;
+        targetLeft = 0;
+        targetRight = 0;
         return;
       }
 
       if (mouseX < centerX - deadZone) {
-        activeSideRef.current = 'left';
+        // Lado izquierdo -> Muestra Producto
+        if (activeSideRef.current !== 'left') {
+          activeSideRef.current = 'left';
+          leftVideo.style.opacity = '1';
+          rightVideo.style.opacity = '0';
+        }
+
         const available = centerX - deadZone;
-        targetLeftProgress = Math.max(0, Math.min(1, (centerX - deadZone - mouseX) / available));
+        const progress = Math.max(0, Math.min(1, (centerX - deadZone - mouseX) / available));
+        if (leftVideo.duration) {
+          targetLeft = progress * leftVideo.duration;
+        }
       } else {
-        activeSideRef.current = 'right';
+        // Lado derecho -> Muestra Modelo
+        if (activeSideRef.current !== 'right') {
+          activeSideRef.current = 'right';
+          rightVideo.style.opacity = '1';
+          leftVideo.style.opacity = '0';
+        }
+
         const available = width - (centerX + deadZone);
-        targetRightProgress = Math.max(0, Math.min(1, (mouseX - (centerX + deadZone)) / available));
+        const progress = Math.max(0, Math.min(1, (mouseX - (centerX + deadZone)) / available));
+        if (rightVideo.duration) {
+          targetRight = progress * rightVideo.duration;
+        }
       }
+    };
+
+    const applyTime = (video: HTMLVideoElement, time: number) => {
+      if (video.seeking) return;
+      if (Math.abs(video.currentTime - time) < 0.015) return;
+
+      const v = video as HTMLVideoElement & { fastSeek?: (t: number) => void };
+      if (typeof v.fastSeek === 'function') {
+        try {
+          v.fastSeek(time);
+          return;
+        } catch {
+          // fallback
+        }
+      }
+      video.currentTime = time;
+    };
+
+    const updateLoop = () => {
+      currentLeft += (targetLeft - currentLeft) * 0.22;
+      currentRight += (targetRight - currentRight) * 0.22;
+
+      const active = activeSideRef.current;
+      if (active === 'left' && leftVideo) {
+        applyTime(leftVideo, currentLeft);
+      } else if (active === 'right' && rightVideo) {
+        applyTime(rightVideo, currentRight);
+      }
+
+      rafId = requestAnimationFrame(updateLoop);
     };
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
-
-    // Render loop estilo Apple Canvas 60-120 FPS
-    const render = () => {
-      const lerp = 0.18;
-      currentLeftProgress += (targetLeftProgress - currentLeftProgress) * lerp;
-      currentRightProgress += (targetRightProgress - currentRightProgress) * lerp;
-
-      const active = activeSideRef.current;
-      const frames = active === 'left' ? leftFramesRef.current : rightFramesRef.current;
-      const progress = active === 'left' ? currentLeftProgress : currentRightProgress;
-
-      if (frames.length > 0) {
-        const frameIndex = Math.min(
-          frames.length - 1,
-          Math.max(0, Math.round(progress * (frames.length - 1)))
-        );
-
-        const img = frames[frameIndex];
-        if (img) {
-          const w = window.innerWidth;
-          const h = window.innerHeight;
-
-          // Object-cover matemático sobre canvas
-          const imgRatio = img.width / img.height;
-          const screenRatio = w / h;
-          let drawW = w;
-          let drawH = h;
-          let drawX = 0;
-          let drawY = 0;
-
-          if (screenRatio > imgRatio) {
-            drawH = w / imgRatio;
-            drawY = (h - drawH) / 2;
-          } else {
-            drawW = h * imgRatio;
-            drawX = (w - drawW) / 2;
-          }
-
-          ctx.drawImage(img, drawX, drawY, drawW, drawH);
-        }
-      }
-
-      rafId = requestAnimationFrame(render);
-    };
-
-    rafId = requestAnimationFrame(render);
+    rafId = requestAnimationFrame(updateLoop);
 
     return () => {
-      window.removeEventListener('resize', resizeCanvas);
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('mousemove', handleMouseMove);
       cancelAnimationFrame(rafId);
     };
-  }, [isReady]);
+  }, []);
+
+  const isAnyLoaded = leftReady || rightReady;
 
   return (
     <div
       ref={containerRef}
       id="main-canvas"
-      className="pointer-events-none overflow-hidden transition-opacity duration-500 ease-out fixed z-0 inset-0 w-full h-full bg-[#E5E5E5]"
+      className="pointer-events-none overflow-hidden transition-opacity duration-300 ease-out fixed z-0 inset-0 w-full h-full bg-[#E5E5E5]"
       style={{
-        opacity: isReady ? 1 : 0.95,
+        opacity: isAnyLoaded ? 1 : 0.8,
       }}
     >
-      <canvas
-        ref={canvasRef}
-        className="w-full h-full block transform-gpu will-change-transform"
+      {/* Poster instantáneo de primer cuadro para evitar cualquier fondo negro */}
+      <img
+        src="https://res.cloudinary.com/yxbhso8s/video/upload/so_0/v1789493593/Woman_turning_her_head_20260915042154.jpg"
+        alt="Hero Model Preview"
+        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-out ${
+          rightReady ? 'opacity-0' : 'opacity-100'
+        }`}
+      />
+
+      <video
+        ref={leftVideoRef}
+        src={VIDEO_LEFT_URL}
+        muted
+        playsInline
+        preload="auto"
+        disablePictureInPicture
+        onLoadedData={() => setLeftReady(true)}
+        className="absolute inset-0 w-full h-full object-cover transform-gpu will-change-transform transition-opacity duration-300 ease-in-out"
+        style={{ opacity: 0, transform: 'translateZ(0)' }}
+      />
+      <video
+        ref={rightVideoRef}
+        src={VIDEO_RIGHT_URL}
+        muted
+        playsInline
+        preload="auto"
+        disablePictureInPicture
+        onLoadedData={() => setRightReady(true)}
+        className="absolute inset-0 w-full h-full object-cover transform-gpu will-change-transform transition-opacity duration-300 ease-in-out"
+        style={{ opacity: 1, transform: 'translateZ(0)' }}
       />
     </div>
   );
