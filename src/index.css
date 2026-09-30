@@ -1,4 +1,130 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600&display=swap');
+
+@theme {
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Outfit', sans-serif;
+  --font-urbanist: 'Urbanist', sans-serif;
+}
+
+@property --border-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes spin-border {
+  to {
+    --border-angle: 360deg;
+  }
+}
+
+.btn-border-wrap {
+  position: relative;
+  display: inline-flex;
+  border-radius: 9999px;
+  padding: 3px;
+  background: transparent;
+  isolation: isolate;
+}
+
+.btn-border-wrap::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  padding: 2.5px;
+  background: conic-gradient(
+    from var(--border-angle),
+    #A068FF,
+    #070319,
+    #A068FF,
+    #070319,
+    #A068FF
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: spin-border 3s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes spin-cw {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spin-ccw {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+.spin-orbit-1 {
+  animation: spin-ccw 30s linear infinite;
+}
+.spin-orbit-2 {
+  animation: spin-cw 40s linear infinite;
+}
+.spin-orbit-3 {
+  animation: spin-cw 50s linear infinite;
+}
+.spin-orbit-4 {
+  animation: spin-ccw 60s linear infinite;
+}
+
+.counter-spin-orbit-1 {
+  animation: spin-cw 30s linear infinite;
+}
+.counter-spin-orbit-2 {
+  animation: spin-ccw 40s linear infinite;
+}
+.counter-spin-orbit-3 {
+  animation: spin-ccw 50s linear infinite;
+}
+.counter-spin-orbit-4 {
+  animation: spin-cw 60s linear infinite;
+}
+
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-infinite {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 28s linear infinite;
+}
+
+.animate-marquee-infinite:hover {
+  animation-play-state: paused;
+}
+
+@keyframes train-bob {
+  0%, 100% {
+    transform: translateY(0) scale(1.03);
+  }
+  50% {
+    transform: translateY(-6px) scale(1.03);
+  }
+}
+
+.animate-train-bob {
+  animation: train-bob 3s ease-in-out infinite;
+  will-change: transform;
+}
 
 @font-face {
   font-family: 'PP Neue Montreal';

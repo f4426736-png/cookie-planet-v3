@@ -1,157 +1,36 @@
 import React, { useState, useEffect, useRef } from 'react';
 
+interface NavLinkItem {
+  label: string;
+  slug?: string;
+  action?: 'cookie' | 'merch' | 'about' | 'contact' | 'redes';
+}
+
 interface SubmenuData {
-  explore: { label: string; href?: string }[];
-  shopOrGuides?: { label: string; href?: string }[];
-  more?: { label: string; href?: string }[];
+  explore: NavLinkItem[];
+  shopOrGuides?: NavLinkItem[];
+  more?: NavLinkItem[];
 }
 
 const MENU_DATA: Record<string, SubmenuData> = {
-  Mac: {
-    explore: [
-      { label: 'Explorar todos los Mac' },
-      { label: 'MacBook Air' },
-      { label: 'MacBook Pro' },
-      { label: 'iMac' },
-      { label: 'Mac mini' },
-      { label: 'Mac Studio' },
-      { label: 'Mac Pro' },
-      { label: 'Monitores' },
-    ],
-    shopOrGuides: [
-      { label: 'Comprar una Mac' },
-      { label: 'Accesorios para Mac' },
-      { label: 'Financiamiento' },
-    ],
-    more: [
-      { label: 'Soporte técnico para la Mac' },
-      { label: 'macOS Sequoia' },
-      { label: 'Apple Intelligence' },
-      { label: 'Continuidad' },
-    ],
-  },
-  iPad: {
-    explore: [
-      { label: 'Explorar todos los iPad' },
-      { label: 'iPad Pro' },
-      { label: 'iPad Air' },
-      { label: 'iPad' },
-      { label: 'iPad mini' },
-      { label: 'Apple Pencil' },
-      { label: 'Teclados' },
-    ],
-    shopOrGuides: [
-      { label: 'Comprar un iPad' },
-      { label: 'Accesorios para iPad' },
-      { label: 'Apple Trade In' },
-    ],
-    more: [
-      { label: 'Soporte técnico para el iPad' },
-      { label: 'iPadOS 18' },
-      { label: 'Apple Intelligence' },
-    ],
-  },
-  iPhone: {
-    explore: [
-      { label: 'Explorar todos los iPhone' },
-      { label: 'iPhone 16 Pro' },
-      { label: 'iPhone 16' },
-      { label: 'iPhone 15' },
-      { label: 'iPhone 14' },
-      { label: 'iPhone SE' },
-    ],
-    shopOrGuides: [
-      { label: 'Comprar un iPhone' },
-      { label: 'Accesorios para iPhone' },
-      { label: 'Apple Trade In' },
-    ],
-    more: [
-      { label: 'Soporte técnico para el iPhone' },
-      { label: 'iOS 18' },
-      { label: 'Apple Intelligence' },
-      { label: 'Privacidad en el iPhone' },
-    ],
-  },
-  Watch: {
-    explore: [
-      { label: 'Explorar todos los Apple Watch' },
-      { label: 'Apple Watch Series 10' },
-      { label: 'Apple Watch Ultra 2' },
-      { label: 'Apple Watch SE' },
-      { label: 'Apple Watch Nike' },
-      { label: 'Apple Watch Hermès' },
-    ],
-    shopOrGuides: [
-      { label: 'Comprar Apple Watch' },
-      { label: 'Correas para Apple Watch' },
-      { label: 'Accesorios' },
-    ],
-    more: [
-      { label: 'Soporte técnico para el Apple Watch' },
-      { label: 'watchOS 11' },
-      { label: 'Salud y fitness' },
-    ],
-  },
-  AirPods: {
-    explore: [
-      { label: 'Explorar todos los AirPods' },
-      { label: 'AirPods 4' },
-      { label: 'AirPods Pro 2' },
-      { label: 'AirPods Max' },
-    ],
-    shopOrGuides: [
-      { label: 'Comprar AirPods' },
-      { label: 'Accesorios para AirPods' },
-    ],
-    more: [
-      { label: 'Soporte para AirPods' },
-      { label: 'Apple Music' },
-      { label: 'Audio espacial' },
-    ],
-  },
   Productos: {
     explore: [
-      { label: '✨ Merch (Archive Collection)', href: '#merch' },
-      { label: '🍪 cookie chocolate chip', href: '#/galleta/chocolate-chip' },
-      { label: '❤️ Cookie Red Velvet', href: '#/galleta/red-velvet' },
-      { label: '🍦 Cookies & Cream', href: '#/galleta/cookies-and-cream' },
-      { label: '🌾 Oatmeal Raisin', href: '#/galleta/oatmeal-raisin' },
-      { label: 'Explorar todos los Productos' },
-      { label: 'Galletas de Sabores' },
-      { label: 'Colección Toonhub' },
-      { label: 'Ediciones Especiales' },
+      { label: '🍪 Chocolate Chip Cookie', slug: 'chocolate-chip', action: 'cookie' },
+      { label: '❤️ Cookie Red Velvet', slug: 'red-velvet', action: 'cookie' },
+      { label: '🍦 Cookies & Cream', slug: 'cookies-and-cream', action: 'cookie' },
+      { label: '🌾 Oatmeal Raisin', slug: 'oatmeal-raisin', action: 'cookie' },
     ],
     shopOrGuides: [
-      { label: 'Comprar cookie chocolate chip', href: '#/galleta/chocolate-chip' },
-      { label: 'Comprar Cookie Red Velvet', href: '#/galleta/red-velvet' },
-      { label: 'Comprar Cookies & Cream', href: '#/galleta/cookies-and-cream' },
-      { label: 'Comprar Oatmeal Raisin', href: '#/galleta/oatmeal-raisin' },
-      { label: 'Comprar Galletas' },
-      { label: 'Cajas de Regalo' },
-      { label: 'Guía de Sabores e Ingredientes' },
+      { label: 'Comprar Chocolate Chip', slug: 'chocolate-chip', action: 'cookie' },
+      { label: 'Comprar Red Velvet', slug: 'red-velvet', action: 'cookie' },
+      { label: 'Comprar Cookies & Cream', slug: 'cookies-and-cream', action: 'cookie' },
+      { label: 'Comprar Oatmeal Raisin', slug: 'oatmeal-raisin', action: 'cookie' },
     ],
     more: [
-      { label: 'Personalización de Pedidos' },
-      { label: 'Envíos y Puntos de Entrega' },
-      { label: 'Atención al Cliente' },
-    ],
-  },
-  Soporte: {
-    explore: [
-      { label: '🪐 About (Ventana Interna)' },
-      { label: 'Comunidades de soporte de Apple' },
-      { label: 'Consultar cobertura de garantía' },
-      { label: 'Reparaciones y servicio técnico' },
-      { label: 'Restablecer contraseña de Apple ID' },
-      { label: 'Facturación y suscripciones' },
-    ],
-    shopOrGuides: [
-      { label: 'Buscar una tienda o centro de servicio' },
-      { label: 'AppleCare+' },
-    ],
-    more: [
-      { label: 'App Soporte de Apple' },
-      { label: 'Ponte en contacto con nosotros' },
+      { label: '✨ Merch (Archive Collection)', action: 'merch' },
+      { label: '🪐 About / Conócenos', action: 'about' },
+      { label: '✉️ Contáctanos / Pedidos', action: 'contact' },
+      { label: '🌐 Redes Sociales (Digital Epoch)', action: 'redes' },
     ],
   },
 };
@@ -159,6 +38,7 @@ const MENU_DATA: Record<string, SubmenuData> = {
 const NAV_ITEMS = [
   'Productos',
   'Merch',
+  'Redes Sociales',
   'Contáctanos',
   'About',
 ];
@@ -168,6 +48,7 @@ interface AppleNavProps {
   onOpenGetStarted?: () => void;
   onOpenOrbisNft?: () => void;
   onOpenForma?: () => void;
+  onOpenRedesSociales?: () => void;
   onOpenCookie?: (cookieSlug?: string) => void;
   onLogoClick?: () => void;
 }
@@ -177,6 +58,7 @@ export const AppleNav: React.FC<AppleNavProps> = ({
   onOpenGetStarted,
   onOpenOrbisNft,
   onOpenForma,
+  onOpenRedesSociales,
   onOpenCookie,
   onLogoClick,
 }) => {
@@ -274,6 +156,28 @@ export const AppleNav: React.FC<AppleNavProps> = ({
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
                     <span>Merch</span>
+                  </a>
+                );
+              }
+              if (item === 'Redes Sociales') {
+                return (
+                  <a
+                    key={item}
+                    href="#/redes-sociales"
+                    onClick={() => {
+                      setActiveMenu(null);
+                      setSearchOpen(false);
+                      setBagOpen(false);
+                    }}
+                    onMouseEnter={() => {
+                      setActiveMenu(null);
+                      setSearchOpen(false);
+                      setBagOpen(false);
+                    }}
+                    className="py-3 px-2 text-[12px] transition-colors duration-200 cursor-pointer flex items-center gap-1.5 text-purple-300 hover:text-purple-200 font-medium"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse" />
+                    <span>Redes Sociales</span>
                   </a>
                 );
               }
@@ -462,10 +366,10 @@ export const AppleNav: React.FC<AppleNavProps> = ({
             onMouseLeave={() => setActiveMenu(null)}
           >
             <div className="max-w-[980px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-              {/* Column 1: Explorar */}
+              {/* Column 1: Explorar Sabores */}
               <div>
                 <p className="text-[12px] text-neutral-400 mb-3 tracking-tight font-medium">
-                  Explorar {activeMenu}
+                  Explorar Sabores de Galleta
                 </p>
                 <ul className="space-y-2.5">
                   {MENU_DATA[activeMenu].explore.map((link) => (
@@ -474,30 +378,18 @@ export const AppleNav: React.FC<AppleNavProps> = ({
                         type="button"
                         onClick={() => {
                           setActiveMenu(null);
-                          if (link.href === '#merch' || link.label.includes('Merch')) {
-                            window.location.hash = '#merch';
-                          } else if (link.label.includes('About') || link.label.includes('Orbis.Nft')) {
-                            onOpenOrbisNft?.();
-                          } else if (link.label.includes('Forma Landing')) {
-                            onOpenForma?.();
-                          } else if (link.label.includes('cookie chocolate chip')) {
-                            onOpenCookie?.('chocolate-chip');
-                          } else if (link.label.includes('Red Velvet') || link.label.includes('red-velvet')) {
-                            onOpenCookie?.('red-velvet');
-                          } else if (link.label.includes('Cookies & Cream') || link.label.includes('cookies-and-cream')) {
-                            onOpenCookie?.('cookies-and-cream');
-                          } else if (link.label.includes('Oatmeal Raisin') || link.label.includes('oatmeal-raisin')) {
-                            onOpenCookie?.('oatmeal-raisin');
+                          if (link.slug) {
+                            onOpenCookie?.(link.slug);
                           }
                         }}
                         className={`text-left text-[20px] font-semibold tracking-tight leading-snug block transition-colors cursor-pointer ${
-                          link.label.includes('cookie chocolate chip')
+                          link.slug === 'chocolate-chip'
                             ? 'text-amber-400 hover:text-amber-300 font-bold'
-                            : link.label.includes('Red Velvet')
+                            : link.slug === 'red-velvet'
                             ? 'text-rose-400 hover:text-rose-300 font-bold'
-                            : link.label.includes('Cookies & Cream')
+                            : link.slug === 'cookies-and-cream'
                             ? 'text-sky-300 hover:text-sky-200 font-bold'
-                            : link.label.includes('Oatmeal Raisin')
+                            : link.slug === 'oatmeal-raisin'
                             ? 'text-amber-200 hover:text-amber-100 font-bold'
                             : 'text-neutral-100 hover:text-white'
                         }`}
@@ -509,11 +401,11 @@ export const AppleNav: React.FC<AppleNavProps> = ({
                 </ul>
               </div>
 
-              {/* Column 2: Comprar o Guías */}
+              {/* Column 2: Comprar Fichas de Galleta */}
               {MENU_DATA[activeMenu].shopOrGuides && (
                 <div>
                   <p className="text-[12px] text-neutral-400 mb-3 tracking-tight font-medium">
-                    Comprar
+                    Ficha de Compra
                   </p>
                   <ul className="space-y-2">
                     {MENU_DATA[activeMenu].shopOrGuides?.map((link) => (
@@ -522,24 +414,18 @@ export const AppleNav: React.FC<AppleNavProps> = ({
                           type="button"
                           onClick={() => {
                             setActiveMenu(null);
-                            if (link.label.includes('cookie chocolate chip')) {
-                              onOpenCookie?.('chocolate-chip');
-                            } else if (link.label.includes('Red Velvet') || link.label.includes('red-velvet')) {
-                              onOpenCookie?.('red-velvet');
-                            } else if (link.label.includes('Cookies & Cream') || link.label.includes('cookies-and-cream')) {
-                              onOpenCookie?.('cookies-and-cream');
-                            } else if (link.label.includes('Oatmeal Raisin') || link.label.includes('oatmeal-raisin')) {
-                              onOpenCookie?.('oatmeal-raisin');
+                            if (link.slug) {
+                              onOpenCookie?.(link.slug);
                             }
                           }}
                           className={`text-left text-[14px] font-medium block transition-colors cursor-pointer ${
-                            link.label.includes('cookie chocolate chip')
+                            link.slug === 'chocolate-chip'
                               ? 'text-amber-400 hover:text-amber-300'
-                              : link.label.includes('Red Velvet')
+                              : link.slug === 'red-velvet'
                               ? 'text-rose-400 hover:text-rose-300'
-                              : link.label.includes('Cookies & Cream')
+                              : link.slug === 'cookies-and-cream'
                               ? 'text-sky-300 hover:text-sky-200'
-                              : link.label.includes('Oatmeal Raisin')
+                              : link.slug === 'oatmeal-raisin'
                               ? 'text-amber-200 hover:text-amber-100'
                               : 'text-neutral-200 hover:text-white'
                           }`}
@@ -552,21 +438,47 @@ export const AppleNav: React.FC<AppleNavProps> = ({
                 </div>
               )}
 
-              {/* Column 3: Más de ... */}
+              {/* Column 3: Más enlaces esenciales */}
               {MENU_DATA[activeMenu].more && (
                 <div>
                   <p className="text-[12px] text-neutral-400 mb-3 tracking-tight font-medium">
-                    Más información
+                    Experiencias & Conexión
                   </p>
                   <ul className="space-y-2">
                     {MENU_DATA[activeMenu].more?.map((link) => (
                       <li key={link.label}>
-                        <a
-                          href={link.href || '#'}
-                          className="text-[14px] text-neutral-200 hover:text-white font-medium block transition-colors"
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setActiveMenu(null);
+                            if (link.action === 'merch') {
+                              window.location.hash = '#merch';
+                            } else if (link.action === 'about') {
+                              onOpenOrbisNft?.();
+                            } else if (link.action === 'contact') {
+                              onOpenForma?.();
+                            } else if (link.action === 'redes') {
+                              if (onOpenRedesSociales) {
+                                onOpenRedesSociales();
+                              } else {
+                                window.location.hash = '#/redes-sociales';
+                              }
+                            }
+                          }}
+                          className={`text-left text-[14px] font-medium block transition-colors cursor-pointer ${
+                            link.action === 'merch'
+                              ? 'text-amber-300 hover:text-amber-200'
+                              : link.action === 'about'
+                              ? 'text-[#6FFF00] hover:text-[#8aff8a]'
+                              : link.action === 'contact'
+                              ? 'text-blue-400 hover:text-blue-300'
+                              : link.action === 'redes'
+                              ? 'text-purple-300 hover:text-purple-200'
+                              : 'text-neutral-200 hover:text-white'
+                          }`}
                         >
                           {link.label}
-                        </a>
+                        </button>
                       </li>
                     ))}
                   </ul>
@@ -722,6 +634,14 @@ export const AppleNav: React.FC<AppleNavProps> = ({
                 >
                   <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
                   <span>Explorar Merch [/#/merch]</span>
+                </a>
+                <a
+                  href="#/redes-sociales"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full py-3 rounded-xl bg-purple-500/20 text-purple-300 border border-purple-400/40 text-sm font-medium flex items-center justify-center gap-2"
+                >
+                  <span className="w-2 h-2 rounded-full bg-purple-400 animate-pulse" />
+                  <span>Explorar Redes Sociales [/#/redes-sociales]</span>
                 </a>
                 <a
                   href="#/contactanos"

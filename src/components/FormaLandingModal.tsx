@@ -6,8 +6,34 @@ interface FormaLandingModalProps {
   onClose: () => void;
 }
 
-const VIDEO_URL =
-  'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260602_150901_c45b90ec-18d7-42ff-90e2-b95d7109e330.mp4';
+interface VideoTrack {
+  label: string;
+  url: string;
+  isDark?: boolean;
+}
+
+const CINEMATIC_VIDEOS: VideoTrack[] = [
+  {
+    label: 'Golden Hour',
+    url: 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260702_081127_0992a171-d3c6-4978-8213-0ec5df8b6d63.mp4',
+  },
+  {
+    label: 'Still Water',
+    url: 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260702_092026_dd05b805-ea0f-40b2-8c52-332b88502592.mp4',
+  },
+  {
+    label: 'Deep Woods',
+    url: 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260702_081042_df7202bf-bd80-4b2b-bbc6-1f09ba2870e9.mp4',
+    isDark: true,
+  },
+  {
+    label: 'Quiet Dawn',
+    url: 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260702_080959_4cac5234-3573-464e-a5b7-76b94b8a7d61.mp4',
+  },
+];
+
+const OVERLAY_PNG =
+  'https://soft-zoom-63098134.figma.site/_assets/v11/0b4a435b2df2747593c43d7a1c9b4578f7d8d90c.png';
 
 const SERVICES = [
   'Caja Surtida (4 uds)',
@@ -40,7 +66,6 @@ const SocialBtn: React.FC<SocialBtnProps> = ({ icon, className, href = '#', labe
   </a>
 );
 
-// Custom Icons matching 13px size
 const TwitterIcon = () => (
   <svg className="w-[13px] h-[13px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
@@ -67,6 +92,8 @@ export const FormaLandingModal: React.FC<FormaLandingModalProps> = ({
   isOpen,
   onClose,
 }) => {
+  const [activeVideo, setActiveVideo] = useState<number>(0);
+  const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
   const [selected, setSelected] = useState<string[]>([]);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -75,6 +102,15 @@ export const FormaLandingModal: React.FC<FormaLandingModalProps> = ({
   const [sent, setSent] = useState(false);
 
   if (!isOpen) return null;
+
+  const handleVideoSwitch = (index: number) => {
+    if (activeVideo === index || isTransitioning) return;
+    setActiveVideo(index);
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setIsTransitioning(false);
+    }, 1000);
+  };
 
   const toggleService = (service: string) => {
     setSelected((prev) =>
@@ -87,14 +123,15 @@ export const FormaLandingModal: React.FC<FormaLandingModalProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSending(true);
-    // 1-second simulated delay
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setSending(false);
     setSent(true);
   };
 
+  const isDeepWoods = activeVideo === 2;
+
   return (
-    <div className="fixed inset-0 z-[9999] overflow-y-auto bg-white p-3 sm:p-4 md:p-6 text-gray-900 font-sans selection:bg-black selection:text-white animate-in fade-in duration-300">
+    <div className="fixed inset-0 z-[9999] overflow-y-auto bg-black p-3 sm:p-4 md:p-6 text-gray-900 font-sans selection:bg-black selection:text-white animate-in fade-in duration-300">
       {/* Floating Close Button */}
       <button
         onClick={onClose}
@@ -106,28 +143,47 @@ export const FormaLandingModal: React.FC<FormaLandingModalProps> = ({
       </button>
 
       {/* Main Large Rounded Card */}
-      <div className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden min-h-[calc(100vh-24px)] sm:min-h-[calc(100vh-32px)] md:min-h-[calc(100vh-48px)] lg:h-[calc(100vh-48px)] bg-neutral-900 shadow-2xl">
-        {/* Background Video */}
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          src={VIDEO_URL}
-          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-        />
+      <div className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden min-h-[calc(100vh-24px)] sm:min-h-[calc(100vh-32px)] md:min-h-[calc(100vh-48px)] lg:h-[calc(100vh-48px)] bg-black shadow-2xl">
+        {/* Layer 0: Background Video Crossfade Layer (Stacked 4 fullscreen looping videos) */}
+        <div className="absolute inset-0 pointer-events-none select-none overflow-hidden z-0">
+          {CINEMATIC_VIDEOS.map((video, idx) => (
+            <video
+              key={video.url}
+              autoPlay
+              muted
+              loop
+              playsInline
+              src={video.url}
+              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${
+                activeVideo === idx ? 'opacity-100' : 'opacity-0 pointer-events-none'
+              }`}
+            />
+          ))}
+        </div>
 
-        {/* Video Overlay for Readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 pointer-events-none" />
+        {/* Layer 1: Transparent PNG Overlay with Train-bob Animation */}
+        <div
+          className="absolute inset-0 pointer-events-none select-none overflow-hidden z-[1]"
+          style={{ transform: 'scale(1.03)' }}
+        >
+          <img
+            src={OVERLAY_PNG}
+            alt="Cinematic Overlay"
+            className="w-full h-full object-cover animate-train-bob opacity-70 mix-blend-screen"
+          />
+        </div>
 
-        {/* Content Layer */}
+        {/* Subtle vignette gradient for legibility */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 pointer-events-none z-[1]" />
+
+        {/* Layer 2: Content Layer */}
         <div className="relative z-10 flex flex-col min-h-[calc(100vh-24px)] sm:min-h-[calc(100vh-32px)] md:min-h-[calc(100vh-48px)] lg:h-full p-4 sm:p-6 md:p-8 gap-6">
           {/* Top Navbar */}
-          <nav className="bg-white/60 backdrop-blur-md rounded-2xl shadow-sm pl-3 sm:pl-4 pr-2 py-2 w-full sm:w-auto self-start flex items-center gap-3 sm:gap-6">
-            {/* Logo 32x32 stylized "M" */}
+          <nav className="liquid-glass rounded-2xl shadow-sm pl-3 sm:pl-4 pr-3 py-2 w-full sm:w-auto self-start flex items-center justify-between sm:justify-start gap-3 sm:gap-6">
+            {/* Logo */}
             <a
               href="#home"
-              className="flex items-center text-black shrink-0 hover:opacity-80 transition-opacity"
+              className="flex items-center text-white shrink-0 hover:opacity-80 transition-opacity"
               aria-label="Cookie Planet Contacto"
             >
               <svg
@@ -138,15 +194,21 @@ export const FormaLandingModal: React.FC<FormaLandingModalProps> = ({
               >
                 <path d="M 256 256 L 128 256 L 0 128 L 128 128 Z M 256 128 L 128 128 L 0 0 L 128 0 Z" />
               </svg>
+              <span
+                style={{ fontFamily: "'Instrument Serif', serif", fontStyle: 'italic' }}
+                className="ml-2.5 text-xl tracking-tight text-white hidden xs:inline"
+              >
+                Cookie Planet
+              </span>
             </a>
 
-            {/* Nav links (hidden on mobile, shown sm:flex) */}
+            {/* Nav links */}
             <div className="hidden sm:flex items-center gap-5">
               {['Nuestras Galletas', 'Cajas & Packs', 'Sabores', 'Preguntas'].map((item) => (
                 <a
                   key={item}
                   href={`#${item.toLowerCase().replace(/\s+/g, '-')}`}
-                  className="text-gray-800 text-sm font-medium hover:opacity-60 transition-opacity whitespace-nowrap"
+                  className="text-white/80 text-sm font-medium hover:text-white transition-colors whitespace-nowrap"
                 >
                   {item}
                 </a>
@@ -156,7 +218,7 @@ export const FormaLandingModal: React.FC<FormaLandingModalProps> = ({
             {/* CTA Button */}
             <a
               href="#contact-form"
-              className="bg-black text-white text-sm font-medium px-4 sm:px-5 py-2 rounded-xl hover:bg-gray-800 transition-colors ml-auto whitespace-nowrap"
+              className="bg-white text-black text-sm font-semibold px-4 sm:px-5 py-2 rounded-xl hover:bg-neutral-100 transition-colors ml-auto whitespace-nowrap shadow-sm"
             >
               Hacer Pedido
             </a>
@@ -165,28 +227,73 @@ export const FormaLandingModal: React.FC<FormaLandingModalProps> = ({
           {/* Spacer */}
           <div className="flex-1 min-h-[2rem]" />
 
+          {/* Video Switcher Capsule Controls (Interactive Cinematic Selector) */}
+          <div className="self-start liquid-glass px-3 py-2 rounded-full flex items-center gap-2 sm:gap-3 flex-wrap">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-white/60 pl-2">
+              Ambiente:
+            </span>
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              {CINEMATIC_VIDEOS.map((vid, idx) => {
+                const isActive = activeVideo === idx;
+                return (
+                  <button
+                    key={vid.label}
+                    type="button"
+                    disabled={isTransitioning}
+                    onClick={() => handleVideoSwitch(idx)}
+                    className={`px-3 py-1 rounded-full text-xs font-medium transition-all duration-300 cursor-pointer ${
+                      isActive
+                        ? 'bg-white text-black shadow-md font-semibold scale-105'
+                        : 'text-white/70 hover:text-white bg-white/5 hover:bg-white/10'
+                    }`}
+                  >
+                    <span>{vid.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           {/* Bottom Row (Headline + Form) */}
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
-            {/* Headline (Left) */}
-            <p className="text-white text-3xl sm:text-4xl xl:text-5xl font-medium leading-tight drop-shadow-lg lg:max-w-lg xl:max-w-2xl shrink-0 m-0">
-              Horneamos tus antojos
-              <br />
-              y los convertimos en{' '}
-              <span
-                style={{
-                  fontFamily: "'Instrument Serif', serif",
-                  fontStyle: 'italic',
-                  fontWeight: 400,
-                }}
-                className="text-white font-normal"
+            {/* Headline (Left) - Adapts smoothly to #182C41 when Deep Woods is active */}
+            <div
+              className={`transition-colors duration-700 lg:max-w-lg xl:max-w-2xl shrink-0 ${
+                isDeepWoods ? 'text-[#182C41]' : 'text-white'
+              }`}
+            >
+              <div className="liquid-glass inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full mb-3 text-xs font-medium text-white/90">
+                <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                <span>Atención directa & Horneo diario</span>
+              </div>
+              <p className="text-3xl sm:text-4xl xl:text-5xl font-medium leading-tight drop-shadow-md m-0">
+                Horneamos tus antojos
+                <br />
+                y los convertimos en{' '}
+                <span
+                  style={{
+                    fontFamily: "'Instrument Serif', serif",
+                    fontStyle: 'italic',
+                    fontWeight: 400,
+                  }}
+                  className="font-normal underline decoration-amber-400/60 decoration-wavy underline-offset-4"
+                >
+                  momentos dulces
+                </span>
+              </p>
+              <p
+                className={`mt-3 text-sm sm:text-base max-w-lg leading-relaxed transition-colors duration-700 ${
+                  isDeepWoods ? 'text-[#182C41]/80 font-medium' : 'text-white/80'
+                }`}
               >
-                momentos dulces
-              </span>
-            </p>
+                Elige el ambiente que más te inspire y déjanos tu mensaje para apartar tu caja
+                favorita hoy mismo.
+              </p>
+            </div>
 
             {/* Contact Form Card (Right) */}
             <div id="contact-form" className="w-full lg:w-[min(480px,45%)] shrink-0">
-              <div className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden p-4 sm:p-6 flex flex-col gap-4">
+              <div className="bg-white/95 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden p-4 sm:p-6 flex flex-col gap-4 border border-white/20">
                 {/* Heading */}
                 <h3 className="text-xl sm:text-2xl font-semibold text-black tracking-tight m-0">
                   ¡Pide tus galletas! 🍪
@@ -233,7 +340,9 @@ export const FormaLandingModal: React.FC<FormaLandingModalProps> = ({
                 {/* OR Divider */}
                 <div className="flex items-center gap-3">
                   <div className="flex-1 h-px bg-gray-200" />
-                  <span className="text-gray-400 font-medium text-sm">O ESCRÍBENOS AQUÍ</span>
+                  <span className="text-gray-400 font-medium text-xs tracking-wider">
+                    O ESCRÍBENOS AQUÍ
+                  </span>
                   <div className="flex-1 h-px bg-gray-200" />
                 </div>
 
@@ -277,7 +386,7 @@ export const FormaLandingModal: React.FC<FormaLandingModalProps> = ({
                         placeholder="Tu nombre completo"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className="flex-1 min-w-0 text-sm px-3 py-2.5 rounded-xl border border-gray-200 bg-transparent placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition"
+                        className="flex-1 min-w-0 text-sm px-3 py-2.5 rounded-xl border border-gray-200 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition"
                       />
                       <input
                         type="text"
@@ -285,7 +394,7 @@ export const FormaLandingModal: React.FC<FormaLandingModalProps> = ({
                         placeholder="WhatsApp o Correo"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="flex-1 min-w-0 text-sm px-3 py-2.5 rounded-xl border border-gray-200 bg-transparent placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition"
+                        className="flex-1 min-w-0 text-sm px-3 py-2.5 rounded-xl border border-gray-200 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition"
                       />
                     </div>
 
@@ -296,7 +405,7 @@ export const FormaLandingModal: React.FC<FormaLandingModalProps> = ({
                       placeholder="Sabores deseados, cantidad de unidades, fecha de entrega o alguna indicación..."
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
-                      className="w-full text-sm px-3 py-2.5 rounded-xl border border-gray-200 bg-transparent placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition resize-none"
+                      className="w-full text-sm px-3 py-2.5 rounded-xl border border-gray-200 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition resize-none"
                     />
 
                     {/* Service Tags */}
@@ -314,7 +423,7 @@ export const FormaLandingModal: React.FC<FormaLandingModalProps> = ({
                               onClick={() => toggleService(service)}
                               className={`text-xs font-medium px-3 py-2 rounded-lg border transition-all cursor-pointer ${
                                 active
-                                  ? 'bg-gray-100 text-black border-black'
+                                  ? 'bg-gray-100 text-black border-black font-semibold'
                                   : 'bg-white text-gray-700 border-gray-200 hover:border-gray-400'
                               }`}
                             >

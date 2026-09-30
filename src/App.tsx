@@ -8,6 +8,7 @@ import { EngineTechFooter } from './components/EngineTechFooter';
 import { AppleNav } from './components/AppleNav';
 import { OrbisNftModal } from './components/OrbisNftModal';
 import { FormaLandingModal } from './components/FormaLandingModal';
+import { RedesSocialesModal } from './components/RedesSocialesModal';
 import { CookiePage } from './components/CookiePage';
 import { COOKIE_DETAILS } from './components/CookieDetailModal';
 import PrmptExperience from './components/PrmptExperience';
@@ -107,6 +108,18 @@ export default function App() {
     }
     return false;
   });
+  const [redesSocialesOpen, setRedesSocialesOpen] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash;
+      return (
+        hash === '#/redes-sociales' ||
+        hash === '#redes-sociales' ||
+        hash === '#/redes' ||
+        hash === '#redes'
+      );
+    }
+    return false;
+  });
   const [customVideoUrl, setCustomVideoUrl] = useState('');
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
@@ -150,6 +163,17 @@ export default function App() {
       } else {
         setFormaOpen(false);
       }
+
+      if (
+        hash === '#/redes-sociales' ||
+        hash === '#redes-sociales' ||
+        hash === '#/redes' ||
+        hash === '#redes'
+      ) {
+        setRedesSocialesOpen(true);
+      } else {
+        setRedesSocialesOpen(false);
+      }
     };
 
     window.addEventListener('hashchange', handleHashChange);
@@ -177,6 +201,23 @@ export default function App() {
       window.location.hash = '';
     } else {
       setFormaOpen(false);
+    }
+  };
+
+  const openRedesSociales = () => {
+    window.location.hash = '#/redes-sociales';
+  };
+
+  const closeRedesSociales = () => {
+    if (
+      window.location.hash === '#/redes-sociales' ||
+      window.location.hash === '#redes-sociales' ||
+      window.location.hash === '#/redes' ||
+      window.location.hash === '#redes'
+    ) {
+      window.location.hash = '';
+    } else {
+      setRedesSocialesOpen(false);
     }
   };
 
@@ -438,6 +479,7 @@ export default function App() {
         onOpenGetStarted={() => setModalOpen(true)}
         onOpenOrbisNft={openAbout}
         onOpenForma={openContact}
+        onOpenRedesSociales={openRedesSociales}
         onOpenCookie={(slug) => navigateToCookiePage(slug || 'chocolate-chip')}
       />
 
@@ -452,7 +494,7 @@ export default function App() {
           </h1>
         </div>
 
-        {/* Floating Internal Windows badge cards (Merch, Forma & Orbis) + Apple Play/Pause button on top-right */}
+        {/* Floating Internal Windows badge cards (Merch, Redes Sociales, Forma & Orbis) + Apple Play/Pause button on top-right */}
         <div className="absolute right-6 sm:right-10 md:right-14 top-20 sm:top-24 pointer-events-auto flex items-center gap-3 z-20">
           <div className="flex flex-col sm:flex-row gap-3">
             <a
@@ -469,6 +511,25 @@ export default function App() {
                   </span>
                   <span className="text-[9px] font-mono text-amber-300 uppercase">
                     [#/merch]
+                  </span>
+                </div>
+              </div>
+            </a>
+
+            <a
+              href="#/redes-sociales"
+              className="liquid-glass group flex items-center gap-3 px-4 py-2.5 rounded-2xl border border-white/20 hover:border-purple-400/50 transition-all cursor-pointer shadow-2xl hover:scale-105"
+            >
+              <div className="w-7 h-7 rounded-full bg-purple-500/20 border border-purple-400/40 flex items-center justify-center text-purple-300 font-bold">
+                <span className="font-sans text-[11px] font-black uppercase">RS</span>
+              </div>
+              <div className="text-left">
+                <div className="flex items-center gap-1.5">
+                  <span className="font-medium text-xs text-white tracking-wider">
+                    Redes Sociales
+                  </span>
+                  <span className="text-[9px] font-mono text-purple-300 uppercase">
+                    [#/redes-sociales]
                   </span>
                 </div>
               </div>
@@ -755,6 +816,12 @@ export default function App() {
       <FormaLandingModal
         isOpen={formaOpen}
         onClose={closeContact}
+      />
+
+      {/* Redes Sociales Internal Window Modal */}
+      <RedesSocialesModal
+        isOpen={redesSocialesOpen}
+        onClose={closeRedesSociales}
       />
     </div>
   );
