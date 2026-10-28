@@ -30,14 +30,14 @@ const baseTestimonials: Testimonial[] = [
   },
   {
     quote: 'Me sorprendió la de Avena y Pasas: suave, con el toque justo de canela y pasas de excelente calidad. Se nota el cariño y la dedicación artesanal en cada entrega.',
-    name: 'Prof. Andrés Morales',
-    role: 'Docente',
+    name: 'Andrés Morales',
+    role: 'Cliente habitual',
     avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=compress&cs=tinysrgb&w=150',
   },
   {
-    quote: 'Hice mi pedido para el recreo y llegó calientita y a tiempo. Excelente atención y la calidad de los ingredientes se siente en el primer mordisco.',
+    quote: 'Hicimos un pedido grande para una reunión en la oficina y llegaron calientitas, perfectamente empacadas y a tiempo. Todos quedaron encantados.',
     name: 'Valentina Castro',
-    role: 'Estudiante',
+    role: 'Coordinadora de Eventos',
     avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=compress&cs=tinysrgb&w=150',
   },
 ];

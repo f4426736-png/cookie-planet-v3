@@ -9,23 +9,27 @@ interface FAQItem {
 const FAQ_DATA: FAQItem[] = [
   {
     q: '¿Cómo y cuándo puedo hacer mi pedido?',
-    a: 'Puedes hacer tus pedidos con anticipación antes de los recreos escolares o para tus eventos. Te entregamos tus galletas recién horneadas y en su empaque individual.',
+    a: 'Puedes hacer tu pedido en línea con anticipación para entrega el mismo día o programar tu fecha deseada. Las horneamos al momento y te las llevamos frescas en empaques individuales o cajas de regalo.',
+  },
+  {
+    q: '¿Hacen entregas a domicilio y envíos?',
+    a: '¡Sí! Realizamos envíos a domicilio en toda la ciudad y también puedes coordinar retiro programado. Para eventos, reuniones corporativas o celebraciones coordinamos entregas por lotes.',
   },
   {
     q: '¿Qué ingredientes utilizan en sus galletas?',
-    a: 'Usamos mantequilla de primera calidad, harina seleccionada, cacao puro, chispas de chocolate semiamargo y avena integral. No utilizamos preservantes artificiales.',
+    a: 'Usamos mantequilla de primera calidad, harina seleccionada, cacao puro, chispas de chocolate semiamargo y avena integral. No utilizamos preservantes artificiales ni saborizantes químicos.',
   },
   {
     q: '¿Vienen calientitas o a temperatura ambiente?',
-    a: 'Las horneamos diariamente antes de cada entrega para que mantengan su textura característica: crocantes por fuera y suaves o derretidas en el centro.',
+    a: 'Las horneamos diariamente antes de cada entrega para que mantengan su textura característica: crocantes por fuera y suaves o con centro fundido. Incluyen una guía para calentarlas en casa si te gustan extra derretidas.',
   },
   {
-    q: '¿Tienen promociones o paquetes de varias unidades?',
-    a: '¡Sí! Contamos con cajas de 4 y 6 galletas surtidas con descuento especial para que puedas probar todos nuestros sabores de Cookie Planet.',
+    q: '¿Tienen promociones o paquetes para eventos?',
+    a: '¡Sí! Contamos con cajas de 4, 6 y 12 galletas surtidas con descuento especial, así como paquetes de catering corporativo, bodas, cumpleaños y regalos personalizados.',
   },
   {
     q: '¿Qué métodos de pago aceptan?',
-    a: 'Aceptamos efectivo en el colegio, transferencias bancarias y billeteras digitales (Yape / Plin / transferencia directa).',
+    a: 'Aceptamos transferencias bancarias directas, billeteras digitales (Yape / Plin), tarjetas de crédito/débito y pago contra entrega previamente coordinado.',
   },
 ];
 
@@ -64,7 +68,7 @@ export const CtaFaqFooterSection: React.FC<CtaFaqFooterSectionProps> = ({ onOrde
                 Cookie Planet?
               </h2>
               <p className="text-[0.95rem] mb-[30px] font-normal opacity-90 max-w-md">
-                Galletas artesanales recién horneadas. Haz tu pedido para el recreo o eventos especiales.
+                Galletas artesanales recién horneadas con entrega a domicilio, mesas dulces y pedidos especiales.
               </p>
               <button
                 type="button"
