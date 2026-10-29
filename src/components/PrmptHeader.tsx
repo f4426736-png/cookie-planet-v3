@@ -32,17 +32,35 @@ export default function PrmptHeader({ onBackToHome }: PrmptHeaderProps) {
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: easeTransition, delay: 0.15 }}
-        className="fixed z-20 pointer-events-none top-4 right-4 lg:top-8 lg:right-8 w-auto lg:w-[330px] h-[30px] flex items-center justify-between"
+        className="fixed z-30 pointer-events-auto top-4 right-4 lg:top-8 lg:right-8 flex items-center gap-3 sm:gap-6"
         style={{ mixBlendMode: 'exclusion' }}
       >
+        <a
+          href="#/merch-kairn"
+          className="px-3 py-1.5 rounded-full text-xs sm:text-[13px] font-semibold border border-[#44DAFD]/70 bg-[#44DAFD]/20 hover:bg-[#44DAFD] text-white hover:text-black transition-all cursor-pointer shadow-lg tracking-wide uppercase flex items-center gap-1.5"
+          title="Ver ventana interna KAIRN Alpine 26 Hero"
+        >
+          <span className="w-1.5 h-1.5 rounded-full bg-[#44DAFD] animate-pulse" />
+          <span>KAIRN Alpine 26</span>
+        </a>
+
+        <a
+          href="#/merch-maren"
+          className="px-3 py-1.5 rounded-full text-xs sm:text-[13px] font-semibold border border-white/60 bg-white/10 hover:bg-white text-white hover:text-black transition-all cursor-pointer shadow-lg tracking-wide uppercase flex items-center gap-1.5"
+          title="Ver ventana interna MAREN Fashion Hero"
+        >
+          <span className="w-1.5 h-1.5 rounded-full bg-[#F4B8A2] animate-pulse" />
+          <span>MAREN Fashion</span>
+        </a>
+
         <span className="hidden sm:inline font-inter-tight font-medium text-[15px] uppercase tracking-[-0.02em] text-white">
           ARCHIVE
         </span>
 
-        <div className="flex items-center gap-[20px] lg:gap-[50px]">
+        <div className="flex items-center gap-[15px] lg:gap-[30px]">
           <svg
             viewBox="0 0 40 40"
-            className="w-[24px] h-[24px] lg:w-[30px] lg:h-[30px]"
+            className="w-[20px] h-[20px] lg:w-[26px] lg:h-[26px]"
             fill="none"
             stroke="white"
             strokeWidth="2.5"

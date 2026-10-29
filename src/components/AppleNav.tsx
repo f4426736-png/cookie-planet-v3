@@ -28,9 +28,29 @@ const MENU_DATA: Record<string, SubmenuData> = {
     ],
     more: [
       { label: '✨ Merch (Archive Collection)', action: 'merch' },
+      { label: '👗 Merch MAREN (Fashion Hero)', action: 'merch' },
+      { label: '🏔️ Merch KAIRN (Alpine 26 Hero)', action: 'merch' },
       { label: '🪐 About / Conócenos', action: 'about' },
       { label: '✉️ Contáctanos / Pedidos', action: 'contact' },
       { label: '🌐 Redes Sociales (Digital Epoch)', action: 'redes' },
+    ],
+  },
+  Merch: {
+    explore: [
+      { label: '🏔️ KAIRN Alpine 26 (Ski-Goggles)', action: 'merch' },
+      { label: '👗 Merch MAREN (Fashion Hero)', action: 'merch' },
+      { label: '✨ Merch Archive (Colección 3D)', action: 'merch' },
+    ],
+    shopOrGuides: [
+      { label: 'Ver KAIRN Goggles Ice-Blue', action: 'merch' },
+      { label: 'Ver Lookbook Editorial 2027', action: 'merch' },
+      { label: 'Galería de Prendas & Tejidos', action: 'merch' },
+      { label: 'Cookie Planet T-shirt Original', action: 'merch' },
+    ],
+    more: [
+      { label: '🍪 Volver a Galletas Artesanales', action: 'cookie' },
+      { label: '🌐 Redes Sociales & Drops', action: 'redes' },
+      { label: '✉️ Pedidos Especiales & Merch', action: 'contact' },
     ],
   },
 };
@@ -139,24 +159,37 @@ export const AppleNav: React.FC<AppleNavProps> = ({
             {NAV_ITEMS.map((item) => {
               if (item === 'Merch') {
                 return (
-                  <a
+                  <button
                     key={item}
-                    href="#/merch"
+                    type="button"
                     onClick={() => {
-                      setActiveMenu(null);
-                      setSearchOpen(false);
-                      setBagOpen(false);
+                      setActiveMenu(activeMenu === 'Merch' ? null : 'Merch');
                     }}
                     onMouseEnter={() => {
-                      setActiveMenu(null);
+                      setActiveMenu('Merch');
                       setSearchOpen(false);
                       setBagOpen(false);
                     }}
-                    className="py-3 px-2 text-[12px] transition-colors duration-200 cursor-pointer flex items-center gap-1.5 text-amber-300 hover:text-white font-medium"
+                    className={`py-3 px-2 text-[12px] transition-colors duration-200 cursor-pointer flex items-center gap-1.5 font-medium ${
+                      activeMenu === 'Merch'
+                        ? 'text-white'
+                        : 'text-amber-300 hover:text-white'
+                    }`}
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
                     <span>Merch</span>
-                  </a>
+                    <svg
+                      viewBox="0 0 10 6"
+                      className={`w-2 h-2 transition-transform duration-200 text-amber-300/80 ${
+                        activeMenu === 'Merch' ? 'rotate-180 text-white' : ''
+                      }`}
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                    >
+                      <path d="M1 1L5 5L9 1" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
                 );
               }
               if (item === 'Redes Sociales') {
@@ -366,10 +399,12 @@ export const AppleNav: React.FC<AppleNavProps> = ({
             onMouseLeave={() => setActiveMenu(null)}
           >
             <div className="max-w-[980px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-              {/* Column 1: Explorar Sabores */}
+              {/* Column 1: Explorar */}
               <div>
-                <p className="text-[12px] text-neutral-400 mb-3 tracking-tight font-medium">
-                  Explorar Sabores de Galleta
+                <p className="text-[12px] text-neutral-400 mb-3 tracking-tight font-medium uppercase">
+                  {activeMenu === 'Merch'
+                    ? 'Colecciones Merch & Moda'
+                    : 'Explorar Sabores de Galleta'}
                 </p>
                 <ul className="space-y-2.5">
                   {MENU_DATA[activeMenu].explore.map((link) => (
@@ -378,12 +413,24 @@ export const AppleNav: React.FC<AppleNavProps> = ({
                         type="button"
                         onClick={() => {
                           setActiveMenu(null);
-                          if (link.slug) {
+                          if (link.action === 'merch') {
+                            if (link.label.includes('KAIRN')) {
+                              window.location.hash = '#/merch-kairn';
+                            } else if (link.label.includes('MAREN')) {
+                              window.location.hash = '#/merch-maren';
+                            } else {
+                              window.location.hash = '#merch';
+                            }
+                          } else if (link.slug) {
                             onOpenCookie?.(link.slug);
                           }
                         }}
                         className={`text-left text-[20px] font-semibold tracking-tight leading-snug block transition-colors cursor-pointer ${
-                          link.slug === 'chocolate-chip'
+                          link.label.includes('KAIRN')
+                            ? 'text-[#44DAFD] hover:text-white font-bold'
+                            : link.label.includes('MAREN')
+                            ? 'text-[#F4B8A2] hover:text-white font-bold'
+                            : link.slug === 'chocolate-chip'
                             ? 'text-amber-400 hover:text-amber-300 font-bold'
                             : link.slug === 'red-velvet'
                             ? 'text-rose-400 hover:text-rose-300 font-bold'
@@ -401,11 +448,11 @@ export const AppleNav: React.FC<AppleNavProps> = ({
                 </ul>
               </div>
 
-              {/* Column 2: Comprar Fichas de Galleta */}
+              {/* Column 2: Fichas o Lookbooks */}
               {MENU_DATA[activeMenu].shopOrGuides && (
                 <div>
-                  <p className="text-[12px] text-neutral-400 mb-3 tracking-tight font-medium">
-                    Ficha de Compra
+                  <p className="text-[12px] text-neutral-400 mb-3 tracking-tight font-medium uppercase">
+                    {activeMenu === 'Merch' ? 'Prendas & Lookbook' : 'Ficha de Compra'}
                   </p>
                   <ul className="space-y-2">
                     {MENU_DATA[activeMenu].shopOrGuides?.map((link) => (
@@ -414,12 +461,22 @@ export const AppleNav: React.FC<AppleNavProps> = ({
                           type="button"
                           onClick={() => {
                             setActiveMenu(null);
-                            if (link.slug) {
+                            if (link.action === 'merch') {
+                              if (link.label.includes('KAIRN')) {
+                                window.location.hash = '#/merch-kairn';
+                              } else {
+                                window.location.hash = '#/merch-maren';
+                              }
+                            } else if (link.slug) {
                               onOpenCookie?.(link.slug);
                             }
                           }}
                           className={`text-left text-[14px] font-medium block transition-colors cursor-pointer ${
-                            link.slug === 'chocolate-chip'
+                            link.label.includes('KAIRN')
+                              ? 'text-[#44DAFD] hover:text-white font-medium'
+                              : activeMenu === 'Merch'
+                              ? 'text-white/80 hover:text-[#F4B8A2]'
+                              : link.slug === 'chocolate-chip'
                               ? 'text-amber-400 hover:text-amber-300'
                               : link.slug === 'red-velvet'
                               ? 'text-rose-400 hover:text-rose-300'
@@ -441,8 +498,8 @@ export const AppleNav: React.FC<AppleNavProps> = ({
               {/* Column 3: Más enlaces esenciales */}
               {MENU_DATA[activeMenu].more && (
                 <div>
-                  <p className="text-[12px] text-neutral-400 mb-3 tracking-tight font-medium">
-                    Experiencias & Conexión
+                  <p className="text-[12px] text-neutral-400 mb-3 tracking-tight font-medium uppercase">
+                    {activeMenu === 'Merch' ? 'Conexión & Tienda' : 'Experiencias & Conexión'}
                   </p>
                   <ul className="space-y-2">
                     {MENU_DATA[activeMenu].more?.map((link) => (
@@ -452,7 +509,16 @@ export const AppleNav: React.FC<AppleNavProps> = ({
                           onClick={() => {
                             setActiveMenu(null);
                             if (link.action === 'merch') {
-                              window.location.hash = '#merch';
+                              if (link.label.includes('KAIRN')) {
+                                window.location.hash = '#/merch-kairn';
+                              } else if (link.label.includes('MAREN')) {
+                                window.location.hash = '#/merch-maren';
+                              } else {
+                                window.location.hash = '#merch';
+                              }
+                            } else if (link.action === 'cookie') {
+                              window.location.hash = '';
+                              window.scrollTo({ top: 0, behavior: 'smooth' });
                             } else if (link.action === 'about') {
                               onOpenOrbisNft?.();
                             } else if (link.action === 'contact') {
@@ -466,7 +532,9 @@ export const AppleNav: React.FC<AppleNavProps> = ({
                             }
                           }}
                           className={`text-left text-[14px] font-medium block transition-colors cursor-pointer ${
-                            link.action === 'merch'
+                            link.label.includes('MAREN')
+                              ? 'text-[#F4B8A2] hover:text-white font-semibold'
+                              : link.action === 'merch'
                               ? 'text-amber-300 hover:text-amber-200'
                               : link.action === 'about'
                               ? 'text-[#6FFF00] hover:text-[#8aff8a]'
@@ -628,12 +696,28 @@ export const AppleNav: React.FC<AppleNavProps> = ({
                   <span>🌾 Oatmeal Raisin</span>
                 </a>
                 <a
+                  href="#/merch-kairn"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full py-3 rounded-xl bg-[#44DAFD]/20 text-[#44DAFD] border border-[#44DAFD]/40 text-sm font-semibold flex items-center justify-center gap-2"
+                >
+                  <span className="w-2 h-2 rounded-full bg-[#44DAFD] animate-pulse" />
+                  <span>🏔️ KAIRN Alpine 26 Hero [/#/merch-kairn]</span>
+                </a>
+                <a
+                  href="#/merch-maren"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full py-3 rounded-xl bg-[#F4B8A2]/20 text-[#F4B8A2] border border-[#F4B8A2]/40 text-sm font-semibold flex items-center justify-center gap-2"
+                >
+                  <span className="w-2 h-2 rounded-full bg-[#F4B8A2] animate-pulse" />
+                  <span>👗 Merch MAREN Fashion Hero [/#/merch-maren]</span>
+                </a>
+                <a
                   href="#/merch"
                   onClick={() => setMobileMenuOpen(false)}
                   className="w-full py-3 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-400/40 text-sm font-medium flex items-center justify-center gap-2"
                 >
                   <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-                  <span>Explorar Merch [/#/merch]</span>
+                  <span>✨ Explorar Merch Archive 3D [/#/merch]</span>
                 </a>
                 <a
                   href="#/redes-sociales"

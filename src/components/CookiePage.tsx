@@ -28,9 +28,9 @@ interface CookiePageProps {
 
 const DEFAULT_COOKIE_VIDEOS: Record<string, string> = {
   'chocolate-chip': 'https://res.cloudinary.com/yxbhso8s/video/upload/v1790406180/2GALLETA_COOKIE_CHOCOCHIP.mp4',
-  'red-velvet': 'https://res.cloudinary.com/yxbhso8s/video/upload/v1790491588/VIDEO_PRINCIPAL_DE_COOKIE_RED_VELVET.mp4',
-  'pink-velvet': 'https://res.cloudinary.com/yxbhso8s/video/upload/v1790491588/VIDEO_PRINCIPAL_DE_COOKIE_RED_VELVET.mp4',
-  'redvelvet': 'https://res.cloudinary.com/yxbhso8s/video/upload/v1790491588/VIDEO_PRINCIPAL_DE_COOKIE_RED_VELVET.mp4',
+  'red-velvet': 'https://res.cloudinary.com/yxbhso8s/video/upload/q_auto,w_1280,vc_h264/v1790491588/VIDEO_PRINCIPAL_DE_COOKIE_RED_VELVET.mp4',
+  'pink-velvet': 'https://res.cloudinary.com/yxbhso8s/video/upload/q_auto,w_1280,vc_h264/v1790491588/VIDEO_PRINCIPAL_DE_COOKIE_RED_VELVET.mp4',
+  'redvelvet': 'https://res.cloudinary.com/yxbhso8s/video/upload/q_auto,w_1280,vc_h264/v1790491588/VIDEO_PRINCIPAL_DE_COOKIE_RED_VELVET.mp4',
   'cookies-and-cream': 'https://res.cloudinary.com/yxbhso8s/video/upload/q_auto,w_1920/v1790499249/VIDEO_DE_LA_SECCION_1111.mp4',
   'cookies-cream': 'https://res.cloudinary.com/yxbhso8s/video/upload/q_auto,w_1920/v1790499249/VIDEO_DE_LA_SECCION_1111.mp4',
   'oatmeal-raisin': 'https://res.cloudinary.com/yxbhso8s/video/upload/v1790540696/VIDEO_DE_LA_PRIMERA_SECCION.mp4',
@@ -162,28 +162,28 @@ const HIGHLIGHTS_REDVELVET: HighlightItem[] = [
     sublabel: 'Reposo en frío de 24 horas.',
     lead: 'Masa aterciopelada carmesí.',
     tail: ' Elaborada con cacao fino y extractos naturales para lograr el tono rojo escarlata y la suavidad inconfundible del auténtico Red Velvet.',
-    videoUrl: 'https://res.cloudinary.com/yxbhso8s/video/upload/v1790493556/video_1_de_la_seccion_2.mp4',
+    videoUrl: 'https://res.cloudinary.com/yxbhso8s/video/upload/q_auto,w_1080,vc_h264/v1790493556/video_1_de_la_seccion_2.mp4',
   },
   {
     id: 'highlight-rv-2',
     sublabel: 'Corazón volcánico de cream cheese.',
     lead: 'Relleno de queso crema suave.',
     tail: ' Inyección artesanal al centro de la galleta que funde en boca y equilibra las notas dulces con un toque lácteo irresistible.',
-    videoUrl: 'https://res.cloudinary.com/yxbhso8s/video/upload/v1790493545/video_2_de_la_seccion_2.mp4',
+    videoUrl: 'https://res.cloudinary.com/yxbhso8s/video/upload/q_auto,w_1080,vc_h264/v1790493545/video_2_de_la_seccion_2.mp4',
   },
   {
     id: 'highlight-rv-3',
     sublabel: 'Horno de precisión a 175°C.',
     lead: 'Borde crocante, núcleo sedoso.',
     tail: ' Horneada al minuto exacto para que el centro permanezca fundente y volcánico sin perder la estructura crocante exterior.',
-    videoUrl: 'https://res.cloudinary.com/yxbhso8s/video/upload/v1790493551/video_3_de_la_seccion_2_recortado.mp4',
+    videoUrl: 'https://res.cloudinary.com/yxbhso8s/video/upload/q_auto,w_1080,vc_h264/v1790493551/video_3_de_la_seccion_2_recortado.mp4',
   },
   {
     id: 'highlight-rv-4',
     sublabel: 'Gotas de chocolate blanco de origen.',
     lead: 'Contraste dulce y cremoso.',
     tail: ' Chispas de chocolate blanco mantecoso que aportan notas caramelizadas de leche y un contraste visual inconfundible.',
-    videoUrl: 'https://res.cloudinary.com/yxbhso8s/video/upload/v1790493544/video_4_de_la_seccion_2.mp4',
+    videoUrl: 'https://res.cloudinary.com/yxbhso8s/video/upload/q_auto,w_1080,vc_h264/v1790493544/video_4_de_la_seccion_2.mp4',
   },
 ];
 

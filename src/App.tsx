@@ -12,6 +12,9 @@ import { RedesSocialesModal } from './components/RedesSocialesModal';
 import { CookiePage } from './components/CookiePage';
 import { COOKIE_DETAILS } from './components/CookieDetailModal';
 import PrmptExperience from './components/PrmptExperience';
+import { MarenFashionHero } from './components/MarenFashionHero';
+import { KairnAlpineHero } from './components/KairnAlpineHero';
+import AboutExperience from './components/AboutExperience';
 
 // Cloudinary streaming optimizado para web background:
 // w_1280 (720p es ideal para fondos fluidos sin saturar buffer ni memoria)
@@ -420,6 +423,52 @@ export default function App() {
     }
   };
 
+  // If user navigated to Merch KAIRN Alpine 26 Hero experience
+  if (
+    currentHash === '#/merch-kairn' ||
+    currentHash === '#merch-kairn' ||
+    currentHash === '#/kairn' ||
+    currentHash === '#kairn'
+  ) {
+    return (
+      <KairnAlpineHero
+        isOpen={true}
+        onClose={() => {
+          window.location.hash = '';
+          setCurrentHash('');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onSwitchToArchive={() => {
+          window.location.hash = '#/merch';
+          setCurrentHash('#/merch');
+        }}
+      />
+    );
+  }
+
+  // If user navigated to Merch MAREN Fashion Hero experience
+  if (
+    currentHash === '#/merch-maren' ||
+    currentHash === '#merch-maren' ||
+    currentHash === '#/maren' ||
+    currentHash === '#maren'
+  ) {
+    return (
+      <MarenFashionHero
+        isOpen={true}
+        onClose={() => {
+          window.location.hash = '';
+          setCurrentHash('');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onSwitchToArchive={() => {
+          window.location.hash = '#/merch';
+          setCurrentHash('#/merch');
+        }}
+      />
+    );
+  }
+
   // If user navigated to Merch interactive experience
   if (currentHash === '#/merch' || currentHash === '#merch') {
     return (
@@ -609,8 +658,16 @@ export default function App() {
         {/* Infinite Marquee */}
         <InfiniteMarquee />
 
-        {/* Toonhub Character-Figurine Carousel Hero Section */}
+        {/* Toonhub Character-Figurine Carousel Hero Section (Sección 3) */}
         <ToonhubHero onCookieClick={(idx) => navigateToCookiePage(idx)} />
+
+        {/* Nueva Sección: AboutExperience (Bento Grid con video background, testimonios, métricas 5,000+ y Cookie Craft marquee) */}
+        <AboutExperience
+          onBackToHome={() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          onOrderClick={() => setModalOpen(true)}
+        />
 
         {/* Testimonial Carousel */}
         <TestimonialCarousel />
