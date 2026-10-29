@@ -15,6 +15,7 @@ import PrmptExperience from './components/PrmptExperience';
 import { MarenFashionHero } from './components/MarenFashionHero';
 import { KairnAlpineHero } from './components/KairnAlpineHero';
 import AboutExperience from './components/AboutExperience';
+import { FeatherAtlasModal } from './components/FeatherAtlasModal';
 
 // Cloudinary streaming optimizado para web background:
 // w_1280 (720p es ideal para fondos fluidos sin saturar buffer ni memoria)
@@ -422,6 +423,25 @@ export default function App() {
       }, 1800);
     }
   };
+
+  // If user navigated to Feather Atlas 3D Bird Field Guide
+  if (
+    currentHash === '#/feather-atlas' ||
+    currentHash === '#feather-atlas' ||
+    currentHash === '#/atlas' ||
+    currentHash === '#atlas'
+  ) {
+    return (
+      <FeatherAtlasModal
+        isOpen={true}
+        onClose={() => {
+          window.location.hash = '';
+          setCurrentHash('');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+      />
+    );
+  }
 
   // If user navigated to Merch KAIRN Alpine 26 Hero experience
   if (

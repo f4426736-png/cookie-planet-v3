@@ -30,6 +30,7 @@ const MENU_DATA: Record<string, SubmenuData> = {
       { label: '✨ Merch (Archive Collection)', action: 'merch' },
       { label: '👗 Merch MAREN (Fashion Hero)', action: 'merch' },
       { label: '🏔️ Merch KAIRN (Alpine 26 Hero)', action: 'merch' },
+      { label: '🪶 Feather Atlas (Guía 3D)', action: 'merch' },
       { label: '🪐 About / Conócenos', action: 'about' },
       { label: '✉️ Contáctanos / Pedidos', action: 'contact' },
       { label: '🌐 Redes Sociales (Digital Epoch)', action: 'redes' },
@@ -37,15 +38,16 @@ const MENU_DATA: Record<string, SubmenuData> = {
   },
   Merch: {
     explore: [
+      { label: '🪶 Feather Atlas (3D Field Guide)', action: 'merch' },
       { label: '🏔️ KAIRN Alpine 26 (Ski-Goggles)', action: 'merch' },
       { label: '👗 Merch MAREN (Fashion Hero)', action: 'merch' },
       { label: '✨ Merch Archive (Colección 3D)', action: 'merch' },
     ],
     shopOrGuides: [
+      { label: 'Ver Feather Atlas Hoopoe & Kingfisher', action: 'merch' },
       { label: 'Ver KAIRN Goggles Ice-Blue', action: 'merch' },
       { label: 'Ver Lookbook Editorial 2027', action: 'merch' },
       { label: 'Galería de Prendas & Tejidos', action: 'merch' },
-      { label: 'Cookie Planet T-shirt Original', action: 'merch' },
     ],
     more: [
       { label: '🍪 Volver a Galletas Artesanales', action: 'cookie' },
@@ -414,7 +416,9 @@ export const AppleNav: React.FC<AppleNavProps> = ({
                         onClick={() => {
                           setActiveMenu(null);
                           if (link.action === 'merch') {
-                            if (link.label.includes('KAIRN')) {
+                            if (link.label.includes('Feather') || link.label.includes('Atlas')) {
+                              window.location.hash = '#/feather-atlas';
+                            } else if (link.label.includes('KAIRN')) {
                               window.location.hash = '#/merch-kairn';
                             } else if (link.label.includes('MAREN')) {
                               window.location.hash = '#/merch-maren';
@@ -426,7 +430,9 @@ export const AppleNav: React.FC<AppleNavProps> = ({
                           }
                         }}
                         className={`text-left text-[20px] font-semibold tracking-tight leading-snug block transition-colors cursor-pointer ${
-                          link.label.includes('KAIRN')
+                          link.label.includes('Feather')
+                            ? 'text-[#a9b98a] hover:text-white font-bold'
+                            : link.label.includes('KAIRN')
                             ? 'text-[#44DAFD] hover:text-white font-bold'
                             : link.label.includes('MAREN')
                             ? 'text-[#F4B8A2] hover:text-white font-bold'
@@ -462,7 +468,9 @@ export const AppleNav: React.FC<AppleNavProps> = ({
                           onClick={() => {
                             setActiveMenu(null);
                             if (link.action === 'merch') {
-                              if (link.label.includes('KAIRN')) {
+                              if (link.label.includes('Feather') || link.label.includes('Atlas')) {
+                                window.location.hash = '#/feather-atlas';
+                              } else if (link.label.includes('KAIRN')) {
                                 window.location.hash = '#/merch-kairn';
                               } else {
                                 window.location.hash = '#/merch-maren';
@@ -472,7 +480,9 @@ export const AppleNav: React.FC<AppleNavProps> = ({
                             }
                           }}
                           className={`text-left text-[14px] font-medium block transition-colors cursor-pointer ${
-                            link.label.includes('KAIRN')
+                            link.label.includes('Feather')
+                              ? 'text-[#a9b98a] hover:text-white font-medium'
+                              : link.label.includes('KAIRN')
                               ? 'text-[#44DAFD] hover:text-white font-medium'
                               : activeMenu === 'Merch'
                               ? 'text-white/80 hover:text-[#F4B8A2]'
@@ -694,6 +704,14 @@ export const AppleNav: React.FC<AppleNavProps> = ({
                 >
                   <span className="w-2 h-2 rounded-full bg-amber-300 animate-pulse" />
                   <span>🌾 Oatmeal Raisin</span>
+                </a>
+                <a
+                  href="#/feather-atlas"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full py-3 rounded-xl bg-[#4d5a3d]/20 text-[#a9b98a] border border-[#a9b98a]/40 text-sm font-semibold flex items-center justify-center gap-2"
+                >
+                  <span className="w-2 h-2 rounded-full bg-[#a9b98a] animate-pulse" />
+                  <span>🪶 Feather Atlas 3D Bird Guide [/#/feather-atlas]</span>
                 </a>
                 <a
                   href="#/merch-kairn"
