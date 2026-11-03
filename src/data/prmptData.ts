@@ -83,8 +83,6 @@ export const GALLERY_ITEMS: GalleryItem[] = [
   },
 ];
 
-export const VIDEO_LEFT_URL =
-  'https://res.cloudinary.com/yxbhso8s/video/upload/v1789493593/Product_rotation_head_turn_20260915034058.mp4';
+export const VIDEO_LEFT_URL = '/videos/product_scrub.mp4';
+export const VIDEO_RIGHT_URL = '/videos/woman_scrub.mp4';
 
-export const VIDEO_RIGHT_URL =
-  'https://res.cloudinary.com/yxbhso8s/video/upload/v1789493593/Woman_turning_her_head_20260915042154.mp4';
