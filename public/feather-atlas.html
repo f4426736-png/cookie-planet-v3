@@ -152,7 +152,7 @@
       inset: 0;
       width: 100%;
       height: 100%;
-      z-index: 5;
+      z-index: 15;
       pointer-events: none;
     }
 
@@ -425,15 +425,23 @@
     /* Fallback 2D Image */
     .fallback-img {
       position: absolute;
-      top: 45%;
+      top: 44%;
       left: 50%;
       transform: translate(-50%, -50%);
-      max-width: 320px;
-      max-height: 320px;
+      max-width: min(85%, 380px);
+      max-height: min(75%, 380px);
       object-fit: contain;
       pointer-events: none;
-      display: none;
+      display: block;
+      opacity: 1;
+      transition: opacity 0.6s ease-out;
       z-index: 4;
+      filter: drop-shadow(0 12px 24px rgba(var(--shadow), 0.22));
+    }
+
+    .fallback-img.loaded-3d {
+      opacity: 0;
+      pointer-events: none;
     }
 
     /* Interaction Hint */
@@ -1440,11 +1448,14 @@
     const camera = new THREE.PerspectiveCamera(26, 1, 0.1, 100);
 
     // Lights
-    const keyLight = new THREE.DirectionalLight(0xfff4e2, 1.6);
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xc8c3b4, 1.4);
+    scene.add(hemiLight);
+
+    const keyLight = new THREE.DirectionalLight(0xfff4e2, 1.8);
     keyLight.position.set(2.5, 4, 5);
     scene.add(keyLight);
 
-    const rimLight = new THREE.DirectionalLight(0xbfd8ff, 0.5);
+    const rimLight = new THREE.DirectionalLight(0xbfd8ff, 1.0);
     rimLight.position.set(-4, 2, -3);
     scene.add(rimLight);
 
@@ -1454,7 +1465,9 @@
 
     const gltfLoader = new GLTFLoader();
     gltfLoader.setDRACOLoader(dracoLoader);
-    gltfLoader.setMeshoptDecoder(MeshoptDecoder);
+    if (MeshoptDecoder) {
+      gltfLoader.setMeshoptDecoder(MeshoptDecoder);
+    }
 
     // BIRD RIGS
     // Home orientation: Euler order YXZ, yaw 0.75 rad, pitch 0.12 rad
@@ -1496,6 +1509,7 @@
           rig.bird.glbUrl,
           (gltf) => {
             const model = gltf.scene;
+            model.updateMatrixWorld(true);
 
             // Compute bounding sphere and center
             const box = new THREE.Box3().setFromObject(model);
@@ -1510,55 +1524,59 @@
             model.traverse((child) => {
               if (child.isMesh) {
                 child.frustumCulled = false;
-                if (child.material && child.material.map) {
-                  child.material.map.anisotropy = renderer.capabilities.getMaxAnisotropy();
+                if (child.material) {
+                  child.material.needsUpdate = true;
+                  child.material.side = THREE.DoubleSide;
+                  if (child.material.map) {
+                    child.material.map.anisotropy = renderer.capabilities.getMaxAnisotropy();
+                  }
                 }
               }
             });
 
             rig.holder.add(model);
             rig.loaded = true;
+            if (idx === activeBirdIdx) {
+              fallbackImgEl.classList.add('loaded-3d');
+            }
             resolve();
           },
-          undefined,
+          (xhr) => {
+            if (xhr.lengthComputable && xhr.total > 0 && idx === activeBirdIdx) {
+              const pct = Math.min(100, Math.round((xhr.loaded / xhr.total) * 100));
+              const label = document.querySelector('.stage-loader-text');
+              if (label) label.textContent = `Preparando espécimen 3D… ${pct}%`;
+            }
+          },
           (err) => {
             console.error('Failed to load GLB for', rig.bird.name, err);
             rig.failed = true;
+            if (idx === activeBirdIdx) {
+              fallbackImgEl.classList.remove('loaded-3d');
+            }
             resolve();
           }
         );
       });
     }
 
-    // Load active bird (Kingfisher) first, then preload Hoopoe in background
-    loadBirdModel(activeBirdIdx).then(() => {
-      stageLoaderEl.classList.remove('visible');
-      const otherIdx = activeBirdIdx === 0 ? 1 : 0;
-      loadBirdModel(otherIdx);
-    });
-
     // FRAMING AND CAMERA MATH
-    let heroW = 1000;
-    let heroH = 700;
+    let heroW = window.innerWidth || 1000;
+    let heroH = window.innerHeight || 700;
     let stageW = 600;
     let stageH = 500;
     let stageRect = { left: 0, top: 0, width: 600, height: 500 };
 
-    let currentCX = 0;
-    let currentCY = 0;
-    let currentPX = 200;
-    let targetCX = 0;
-    let targetCY = 0;
-    let targetPX = 200;
+    let currentCX = heroW * 0.5;
+    let currentCY = heroH * 0.5;
+    let currentPX = 280;
+    let targetCX = heroW * 0.5;
+    let targetCY = heroH * 0.5;
+    let targetPX = 280;
+    let hasInitializedMeasurements = false;
 
     let zoom = 1.0;
     let targetZoom = 1.0;
-
-    const resizeObserver = new ResizeObserver(() => {
-      updateMeasurements();
-    });
-    resizeObserver.observe(heroEl);
-    resizeObserver.observe(stageEl);
 
     function updateMeasurements() {
       const hRect = heroEl.getBoundingClientRect();
@@ -1570,6 +1588,8 @@
       stageRect = sRect;
 
       renderer.setSize(heroW, heroH, false);
+      camera.aspect = heroW / heroH;
+      camera.updateProjectionMatrix();
 
       const isFocus = heroEl.classList.contains('focus');
 
@@ -1585,12 +1605,33 @@
         targetPX = Math.min(stageW * 0.5, stageH * 0.6) * 1.16;
       }
 
-      if (currentPX === 200) {
+      if (!hasInitializedMeasurements) {
+        hasInitializedMeasurements = true;
         currentCX = targetCX;
         currentCY = targetCY;
         currentPX = targetPX;
       }
     }
+
+    // Synchronous initial measurements
+    updateMeasurements();
+
+    const resizeObserver = new ResizeObserver(() => {
+      updateMeasurements();
+    });
+    resizeObserver.observe(heroEl);
+    resizeObserver.observe(stageEl);
+
+    // Initial model load
+    stageLoaderEl.classList.add('visible');
+    const initLabel = document.querySelector('.stage-loader-text');
+    if (initLabel) initLabel.textContent = 'Preparando espécimen 3D…';
+
+    loadBirdModel(activeBirdIdx).then(() => {
+      stageLoaderEl.classList.remove('visible');
+      const otherIdx = activeBirdIdx === 0 ? 1 : 0;
+      loadBirdModel(otherIdx);
+    });
 
     // USER INTERACTION (POINTER CAPTURE ON STAGE)
     let isDragging = false;
@@ -1819,11 +1860,20 @@
       const incomingRig = birdRigs[newIdx];
       if (!incomingRig.loaded && !incomingRig.failed) {
         stageLoaderEl.classList.add('visible');
+        fallbackImgEl.classList.remove('loaded-3d');
         loadBirdModel(newIdx).then(() => {
           stageLoaderEl.classList.remove('visible');
+          if (incomingRig.loaded) {
+            fallbackImgEl.classList.add('loaded-3d');
+          }
         });
       } else {
         stageLoaderEl.classList.remove('visible');
+        if (incomingRig.loaded) {
+          fallbackImgEl.classList.add('loaded-3d');
+        } else {
+          fallbackImgEl.classList.remove('loaded-3d');
+        }
       }
 
       // Reset zoom and home orientation on incoming
@@ -1886,7 +1936,11 @@
       // Fallback 2D Image source
       fallbackImgEl.src = b.pngUrl;
       const rig = birdRigs[BIRDS.indexOf(b)];
-      fallbackImgEl.style.display = (rig && rig.failed) ? 'block' : 'none';
+      if (rig && rig.loaded) {
+        fallbackImgEl.classList.add('loaded-3d');
+      } else {
+        fallbackImgEl.classList.remove('loaded-3d');
+      }
     }
 
     // Populate initial content

@@ -12,10 +12,9 @@ export default function HeroVideoScrubber() {
   const activeSideRef = useRef<'left' | 'right'>('right');
 
   useEffect(() => {
-    const isTouch =
-      window.matchMedia('(pointer: coarse)').matches ||
-      'ontouchstart' in window ||
-      window.innerWidth < 1024;
+    // Only pure touch screens with no hover capability should use the mobile loop
+    const isTouchOnly =
+      window.matchMedia('(pointer: coarse) and (hover: none)').matches;
 
     const leftVideo = leftVideoRef.current;
     const rightVideo = rightVideoRef.current;
@@ -31,8 +30,8 @@ export default function HeroVideoScrubber() {
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
 
-    // En dispositivos móviles touch: reproduce en bucle alternado
-    if (isTouch) {
+    // En dispositivos móviles exclusivamente táctiles (sin ratón): reproduce en bucle alternado
+    if (isTouchOnly) {
       leftVideo.style.display = 'block';
       leftVideo.style.opacity = '1';
       rightVideo.style.display = 'none';
@@ -70,50 +69,103 @@ export default function HeroVideoScrubber() {
       };
     }
 
-    // DESKTOP: Modo Scrubber interactivo inmediato
+    // MODO ESCRITORIO / CURSOR INTERACTIVO DE ALTA FLUIDEZ
     leftVideo.muted = true;
     leftVideo.playsInline = true;
-    leftVideo.pause();
+    leftVideo.loop = true;
     leftVideo.style.display = 'block';
     leftVideo.style.opacity = '0';
 
     rightVideo.muted = true;
     rightVideo.playsInline = true;
-    rightVideo.pause();
+    rightVideo.loop = true;
     rightVideo.style.display = 'block';
     rightVideo.style.opacity = '1';
+
+    // Iniciar con reproducción suave
+    rightVideo.play().catch(() => {});
 
     let targetLeft = 0;
     let targetRight = 0;
     let currentLeft = 0;
     let currentRight = 0;
+    let isUserScrubbing = false;
+    let idleTimeout: NodeJS.Timeout | null = null;
+    let pendingLeftSeek: number | null = null;
+    let pendingRightSeek: number | null = null;
     let rafId: number;
 
-    const handleMouseMove = (e: MouseEvent) => {
-      const width = window.innerWidth;
-      const centerX = width / 2;
-      const mouseX = e.clientX;
-      const deadZone = Math.max(30, width * 0.04);
+    const performSeek = (video: HTMLVideoElement, time: number, side: 'left' | 'right') => {
+      if (isNaN(time) || !isFinite(time) || time < 0) return;
+      const duration = video.duration || 5;
+      const clampedTime = Math.max(0, Math.min(duration - 0.05, time));
 
-      if (Math.abs(mouseX - centerX) <= deadZone) {
-        targetLeft = 0;
-        targetRight = 0;
+      if (Math.abs(video.currentTime - clampedTime) < 0.02) return;
+
+      if (video.seeking) {
+        if (side === 'left') pendingLeftSeek = clampedTime;
+        else pendingRightSeek = clampedTime;
         return;
       }
 
-      if (mouseX < centerX - deadZone) {
-        // Lado izquierdo -> Muestra Producto
+      const v = video as HTMLVideoElement & { fastSeek?: (t: number) => void };
+      if (typeof v.fastSeek === 'function') {
+        try {
+          v.fastSeek(clampedTime);
+          return;
+        } catch {
+          // fallback to currentTime
+        }
+      }
+      try {
+        video.currentTime = clampedTime;
+      } catch {
+        // ignore seek error
+      }
+    };
+
+    const handleLeftSeeked = () => {
+      if (pendingLeftSeek !== null && leftVideo) {
+        const t = pendingLeftSeek;
+        pendingLeftSeek = null;
+        performSeek(leftVideo, t, 'left');
+      }
+    };
+
+    const handleRightSeeked = () => {
+      if (pendingRightSeek !== null && rightVideo) {
+        const t = pendingRightSeek;
+        pendingRightSeek = null;
+        performSeek(rightVideo, t, 'right');
+      }
+    };
+
+    leftVideo.addEventListener('seeked', handleLeftSeeked);
+    rightVideo.addEventListener('seeked', handleRightSeeked);
+
+    const handleMouseMove = (e: MouseEvent) => {
+      isUserScrubbing = true;
+      if (idleTimeout) clearTimeout(idleTimeout);
+
+      // Pausar vídeos para control táctil preciso por cursor
+      if (!leftVideo.paused) leftVideo.pause();
+      if (!rightVideo.paused) rightVideo.pause();
+
+      const width = window.innerWidth;
+      const centerX = width / 2;
+      const mouseX = e.clientX;
+
+      if (mouseX < centerX) {
+        // Lado izquierdo -> Muestra Producto 3D
         if (activeSideRef.current !== 'left') {
           activeSideRef.current = 'left';
           leftVideo.style.opacity = '1';
           rightVideo.style.opacity = '0';
         }
 
-        const available = centerX - deadZone;
-        const progress = Math.max(0, Math.min(1, (centerX - deadZone - mouseX) / available));
-        if (leftVideo.duration) {
-          targetLeft = progress * leftVideo.duration;
-        }
+        const progress = 1 - Math.max(0, Math.min(1, mouseX / centerX));
+        const dur = leftVideo.duration || 4.0;
+        targetLeft = progress * dur;
       } else {
         // Lado derecho -> Muestra Modelo
         if (activeSideRef.current !== 'right') {
@@ -122,39 +174,33 @@ export default function HeroVideoScrubber() {
           leftVideo.style.opacity = '0';
         }
 
-        const available = width - (centerX + deadZone);
-        const progress = Math.max(0, Math.min(1, (mouseX - (centerX + deadZone)) / available));
-        if (rightVideo.duration) {
-          targetRight = progress * rightVideo.duration;
-        }
+        const progress = Math.max(0, Math.min(1, (mouseX - centerX) / (width - centerX)));
+        const dur = rightVideo.duration || 4.0;
+        targetRight = progress * dur;
       }
-    };
 
-    const applyTime = (video: HTMLVideoElement, time: number) => {
-      if (video.seeking) return;
-      if (Math.abs(video.currentTime - time) < 0.015) return;
-
-      const v = video as HTMLVideoElement & { fastSeek?: (t: number) => void };
-      if (typeof v.fastSeek === 'function') {
-        try {
-          v.fastSeek(time);
-          return;
-        } catch {
-          // fallback
+      // Si el usuario deja quieto el cursor por 1.8 segundos, retomar animación suave en bucle
+      idleTimeout = setTimeout(() => {
+        isUserScrubbing = false;
+        const currentActive = activeSideRef.current === 'left' ? leftVideo : rightVideo;
+        if (currentActive && currentActive.paused) {
+          currentActive.playbackRate = 0.85;
+          currentActive.play().catch(() => {});
         }
-      }
-      video.currentTime = time;
+      }, 1800);
     };
 
     const updateLoop = () => {
-      currentLeft += (targetLeft - currentLeft) * 0.22;
-      currentRight += (targetRight - currentRight) * 0.22;
+      if (isUserScrubbing) {
+        currentLeft += (targetLeft - currentLeft) * 0.32;
+        currentRight += (targetRight - currentRight) * 0.32;
 
-      const active = activeSideRef.current;
-      if (active === 'left' && leftVideo) {
-        applyTime(leftVideo, currentLeft);
-      } else if (active === 'right' && rightVideo) {
-        applyTime(rightVideo, currentRight);
+        const active = activeSideRef.current;
+        if (active === 'left' && leftVideo) {
+          performSeek(leftVideo, currentLeft, 'left');
+        } else if (active === 'right' && rightVideo) {
+          performSeek(rightVideo, currentRight, 'right');
+        }
       }
 
       rafId = requestAnimationFrame(updateLoop);
@@ -166,6 +212,9 @@ export default function HeroVideoScrubber() {
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('mousemove', handleMouseMove);
+      if (idleTimeout) clearTimeout(idleTimeout);
+      leftVideo.removeEventListener('seeked', handleLeftSeeked);
+      rightVideo.removeEventListener('seeked', handleRightSeeked);
       cancelAnimationFrame(rafId);
     };
   }, []);
