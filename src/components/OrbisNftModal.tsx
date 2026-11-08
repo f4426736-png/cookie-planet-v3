@@ -31,19 +31,19 @@ const NFT_CARDS = [
     video:
       'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260331_053923_22c0a6a5-313c-474c-85ff-3b50d25e944a.mp4',
     score: '100% ARTESANAL',
-    title: 'COOKIE PLANET // NUESTRA MISIÓN',
+    title: 'ANGELICA SHOP // NUESTRA MISIÓN',
   },
   {
     video:
       'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260331_054411_511c1b7a-fb2f-42ef-bf6c-32c0b1a06e79.mp4',
     score: 'HORNEADO DIARIO',
-    title: 'COOKIE PLANET // NUESTRA VISIÓN',
+    title: 'ANGELICA SHOP // NUESTRA VISIÓN',
   },
   {
     video:
       'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260331_055427_ac7035b5-9f3b-4289-86fc-941b2432317d.mp4',
     score: 'CHOCOLATE REAL',
-    title: 'COOKIE PLANET // NUESTROS VALORES',
+    title: 'ANGELICA SHOP // NUESTROS VALORES',
   },
 ];
 
@@ -148,7 +148,7 @@ export const OrbisNftModal: React.FC<OrbisNftModalProps> = ({ isOpen, onClose })
               className="font-condiment text-[24px] sm:text-[36px] md:text-[44px] lg:text-[48px] text-[#6FFF00] absolute right-0 sm:-right-8 top-1/2 -translate-y-1/2 -rotate-1 opacity-90 pointer-events-none select-none"
               style={{ mixBlendMode: 'exclusion' }}
             >
-              Cookie Planet
+              Angelica Shop
             </span>
           </div>
 
@@ -221,7 +221,7 @@ export const OrbisNftModal: React.FC<OrbisNftModalProps> = ({ isOpen, onClose })
                 className="font-condiment text-[36px] sm:text-[50px] md:text-[68px] text-[#6FFF00] absolute -right-6 sm:-right-12 -bottom-4 -rotate-3 select-none pointer-events-none"
                 style={{ mixBlendMode: 'exclusion' }}
               >
-                Cookie Planet
+                Angelica Shop
               </span>
             </div>
 
@@ -335,12 +335,12 @@ export const OrbisNftModal: React.FC<OrbisNftModalProps> = ({ isOpen, onClose })
         {/* Text Content (positioned absolute over the video) */}
         <div className="absolute inset-0 flex flex-col justify-center items-end lg:pr-[20%] lg:pl-[15%] p-6 sm:p-12 pointer-events-none">
           <div className="relative pointer-events-auto">
-            {/* Small "Cookie Planet" text in Condiment cursive, neon green */}
+            {/* Small "Angelica Shop" text in Condiment cursive, neon green */}
             <span
               className="font-condiment text-[24px] sm:text-[40px] md:text-[54px] lg:text-[68px] text-[#6FFF00] absolute -left-12 sm:-left-20 -top-8 sm:-top-14 select-none"
               style={{ mixBlendMode: 'exclusion' }}
             >
-              Cookie Planet
+              Angelica Shop
             </span>
 
             {/* Heading in Anton uppercase */}
@@ -383,7 +383,7 @@ export const OrbisNftModal: React.FC<OrbisNftModalProps> = ({ isOpen, onClose })
 
       {/* Footer bar */}
       <footer className="w-full bg-[#010828] py-8 px-6 sm:px-12 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs uppercase tracking-widest text-[#EFF4FF]/60">
-        <div>© 2026 COOKIE PLANET — ARTISANAL COOKIES & SPECIALTY BAKERY</div>
+        <div>© 2026 ANGELICA SHOP — ARTISANAL COOKIES & SPECIALTY BAKERY</div>
         <button
           onClick={onClose}
           className="text-[#6FFF00] hover:underline cursor-pointer"

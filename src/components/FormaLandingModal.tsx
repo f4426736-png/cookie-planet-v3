@@ -184,7 +184,7 @@ export const FormaLandingModal: React.FC<FormaLandingModalProps> = ({
             <a
               href="#home"
               className="flex items-center text-white shrink-0 hover:opacity-80 transition-opacity"
-              aria-label="Cookie Planet Contacto"
+              aria-label="Angelica Shop Contacto"
             >
               <svg
                 viewBox="0 0 256 256"
@@ -198,7 +198,7 @@ export const FormaLandingModal: React.FC<FormaLandingModalProps> = ({
                 style={{ fontFamily: "'Instrument Serif', serif", fontStyle: 'italic' }}
                 className="ml-2.5 text-xl tracking-tight text-white hidden xs:inline"
               >
-                Cookie Planet
+                Angelica Shop
               </span>
             </a>
 
@@ -306,10 +306,10 @@ export const FormaLandingModal: React.FC<FormaLandingModalProps> = ({
                       Atención & Pedidos
                     </span>
                     <a
-                      href="mailto:pedidos@cookieplanet.com"
+                      href="mailto:pedidos@angelicashop.com"
                       className="text-amber-700 font-semibold hover:underline truncate text-sm"
                     >
-                      pedidos@cookieplanet.com
+                      pedidos@angelicashop.com
                     </a>
                   </div>
 

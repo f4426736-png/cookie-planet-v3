@@ -202,7 +202,7 @@ export const MarenFashionHero: React.FC<MarenFashionHeroProps> = ({
         />
       </div>
 
-      {/* 3. GIANT ITALIC WATERMARK ("COOKIE PLANET" across the bottom at low opacity, partly behind model foreground) */}
+      {/* 3. GIANT ITALIC WATERMARK ("ANGELICA SHOP" across the bottom at low opacity, partly behind model foreground) */}
       <div
         className="maren-anim-watermark absolute bottom-0 left-0 w-full flex justify-center items-end pointer-events-none overflow-hidden z-10"
         style={{ height: 'calc(250 * var(--u))' }}
@@ -214,7 +214,7 @@ export const MarenFashionHero: React.FC<MarenFashionHeroProps> = ({
             transform: 'translateY(12%)',
           }}
         >
-          COOKIE PLANET
+          ANGELICA SHOP
         </span>
       </div>
 
@@ -226,13 +226,13 @@ export const MarenFashionHero: React.FC<MarenFashionHeroProps> = ({
           className="maren-anim-header w-full flex items-center justify-between md:px-[calc(34*var(--u))] z-30"
           style={{ height: 'calc(68 * var(--u))' }}
         >
-          {/* Brand Logo "COOKIE PLANET" in Playfair italic + Merch label */}
+          {/* Brand Logo "ANGELICA SHOP" in Playfair italic + Merch label */}
           <div className="flex items-center gap-3">
             <div className="flex items-baseline gap-2">
               <span
                 className="font-playfair italic text-white text-[22px] sm:text-[28px] md:text-[calc(30*var(--u))] font-normal tracking-wide cursor-pointer hover:opacity-90 transition-opacity"
               >
-                COOKIE PLANET
+                ANGELICA SHOP
               </span>
               <span
                 className="text-[10px] md:text-[calc(11*var(--u))] uppercase tracking-[0.25em] text-[#F4B8A2] font-semibold"
@@ -316,7 +316,7 @@ export const MarenFashionHero: React.FC<MarenFashionHeroProps> = ({
                 </span>
               </button>
 
-              {/* Close Button to return to Cookie Planet */}
+              {/* Close Button to return to Angelica Shop */}
               <button
                 type="button"
                 onClick={onClose}
@@ -427,7 +427,7 @@ export const MarenFashionHero: React.FC<MarenFashionHeroProps> = ({
             </div>
           </div>
 
-          {/* BOTTOM-LEFT: "COOKIE / PLANET / MERCH" (Inside left column, below horizontal rule) */}
+          {/* BOTTOM-LEFT: "ANGELICA / SHOP / MERCH" (Inside left column, below horizontal rule) */}
           <div
             className="hidden md:flex flex-col z-20 absolute"
             style={{
@@ -439,9 +439,9 @@ export const MarenFashionHero: React.FC<MarenFashionHeroProps> = ({
               className="font-light tracking-[0.22em] text-white/70 uppercase leading-[1.6]"
               style={{ fontSize: 'calc(11 * var(--u))' }}
             >
-              COOKIE
+              ANGELICA
               <br />
-              PLANET
+              SHOP
               <br />
               APPAREL
             </span>
@@ -484,7 +484,7 @@ export const MarenFashionHero: React.FC<MarenFashionHeroProps> = ({
                   fontSize: 'calc(13 * var(--u))',
                 }}
               >
-                Cookie Planet T-shirt
+                Angelica Shop T-shirt
               </p>
             </div>
           </div>
@@ -492,7 +492,7 @@ export const MarenFashionHero: React.FC<MarenFashionHeroProps> = ({
 
         {/* Mobile bottom info bar */}
         <div className="md:hidden flex items-center justify-between pt-2 pb-1 text-xs text-white/70 border-t border-white/10 z-20">
-          <span className="tracking-widest uppercase">COOKIE PLANET MERCH 2027</span>
+          <span className="tracking-widest uppercase">ANGELICA SHOP MERCH 2027</span>
           <span>APPAREL COLLECTION</span>
         </div>
       </div>

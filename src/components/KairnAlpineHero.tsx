@@ -162,13 +162,13 @@ export const KairnAlpineHero: React.FC<KairnAlpineHeroProps> = ({
           className="kairn-anim-header w-full flex items-center justify-between z-30"
           style={{ minHeight: 'calc(44 * var(--k))' }}
         >
-          {/* Top Left: Cookie Planet Winter Apparel wordmark */}
+          {/* Top Left: Angelica Shop Winter Apparel wordmark */}
           <div className="flex items-center gap-3 sm:gap-4">
             <span
               className="font-anybody-wide font-extrabold tracking-[0.06em] text-[20px] sm:text-[24px] md:text-[calc(26*var(--k))] cursor-pointer leading-none flex items-center gap-1.5"
             >
-              <span className="text-[#44DAFD]">COOKIE</span>
-              <span className="text-white">PLANET</span>
+              <span className="text-[#44DAFD]">ANGELICA</span>
+              <span className="text-white">SHOP</span>
               <span className="text-[10px] md:text-[calc(11*var(--k))] font-bold text-black bg-[#44DAFD] px-2 py-0.5 rounded-full ml-1 font-sans">
                 WINTER
               </span>
@@ -201,7 +201,7 @@ export const KairnAlpineHero: React.FC<KairnAlpineHeroProps> = ({
               onClick={(e) => e.preventDefault()}
               className="hover:text-[#44DAFD] transition-colors cursor-pointer"
             >
-              UNIVERSO COOKIE
+              UNIVERSO ANGELICA
             </a>
           </nav>
 
@@ -223,7 +223,7 @@ export const KairnAlpineHero: React.FC<KairnAlpineHeroProps> = ({
               </span>
             </div>
 
-            {/* Exit to Cookie Planet */}
+            {/* Exit to Angelica Shop */}
             <button
               type="button"
               onClick={onClose}
@@ -317,7 +317,7 @@ export const KairnAlpineHero: React.FC<KairnAlpineHeroProps> = ({
               }}
             >
               <span className="font-anybody font-bold text-[10px] md:text-[calc(11*var(--k))] tracking-[0.2em] uppercase text-[#44DAFD]">
-                COOKIE PLANET
+                ANGELICA SHOP
               </span>
 
               <div className="my-2">
@@ -412,15 +412,15 @@ export const KairnAlpineHero: React.FC<KairnAlpineHeroProps> = ({
             >
               <img
                 src={SKIER_THUMBNAIL}
-                alt="Cookie Planet Alpine winter edition"
+                alt="Angelica Shop Alpine winter edition"
                 className="w-12 h-12 md:w-[calc(50*var(--k))] md:h-[calc(50*var(--k))] rounded-xl object-cover shrink-0 border border-white/30"
               />
               <div className="flex flex-col text-left">
                 <span className="font-anybody font-bold text-[10px] md:text-[calc(11*var(--k))] uppercase tracking-widest text-[#44DAFD]">
-                  COLECCIÓN GLACIAR COOKIE
+                  COLECCIÓN GLACIAR ANGELICA
                 </span>
                 <p className="font-sans text-[11px] md:text-[calc(12*var(--k))] text-white/85 leading-snug">
-                  Prendas técnicas y accesorios de invierno creados para la comunidad Cookie Planet.{' '}
+                  Prendas técnicas y accesorios de invierno creados para la comunidad Angelica Shop.{' '}
                   <span className="underline text-white font-medium cursor-pointer hover:text-[#44DAFD]">
                     Conocer más
                   </span>

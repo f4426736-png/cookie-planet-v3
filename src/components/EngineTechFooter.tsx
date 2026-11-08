@@ -23,7 +23,7 @@ export const EngineTechFooter: React.FC<EngineTechFooterProps> = ({ onCookieClic
           </h2>
 
           {/* Nav 1: Sabores */}
-          <nav className="site-footer__nav" aria-label="Sabores de Cookie Planet">
+          <nav className="site-footer__nav" aria-label="Sabores de Angelica Shop">
             <span className="text-xs uppercase tracking-widest text-white/40 font-semibold mb-2 block">Sabores</span>
             <button
               type="button"
@@ -81,7 +81,7 @@ export const EngineTechFooter: React.FC<EngineTechFooterProps> = ({ onCookieClic
           <nav className="site-footer__nav" aria-label="Redes y Contacto">
             <span className="text-xs uppercase tracking-widest text-white/40 font-semibold mb-2 block">Contacto</span>
             <a
-              href="https://wa.me/?text=Hola%20Cookie%20Planet,%20quisiera%20pedir%20galletas!"
+              href="https://wa.me/?text=Hola%20Angelica%20Shop,%20quisiera%20pedir%20galletas!"
               target="_blank"
               rel="noreferrer"
               className="text-[#6FFF00] hover:underline"
@@ -110,18 +110,18 @@ export const EngineTechFooter: React.FC<EngineTechFooterProps> = ({ onCookieClic
           <a
             href="/"
             className="site-footer__brand"
-            aria-label="Cookie Planet inicio"
+            aria-label="Angelica Shop inicio"
           >
             {/* Brand mark with cookie emoji or styling */}
             <span className="site-footer__mark" aria-hidden="true" />
             {/* Oversized Brand wordmark */}
-            <span className="site-footer__wordmark">Cookie Planet</span>
+            <span className="site-footer__wordmark">Angelica Shop</span>
           </a>
         </div>
 
         {/* LEGAL LINE */}
         <div className="site-footer__legal">
-          <p>© 2026 Cookie Planet • Proyecto de Emprendimiento Escolar. Todos los derechos reservados.</p>
+          <p>© 2026 Angelica Shop • Proyecto de Emprendimiento Escolar. Todos los derechos reservados.</p>
           <a href="#privacy">Términos de Compra</a>
           <a href="#terms">Política de Entregas</a>
         </div>

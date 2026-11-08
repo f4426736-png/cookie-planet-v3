@@ -272,7 +272,7 @@ export default function GalleryGrid() {
           <div className="font-inter-tight font-medium text-[20px] lg:text-[30px] leading-[100%] tracking-[-0.04em] uppercase text-white mt-4 sm:mt-6 text-left">
             ARCHIVE COLLECTION
             <br />
-            "COOKIE PLANET"
+            "ANGELICA SHOP"
           </div>
         </div>
 
@@ -306,7 +306,7 @@ export default function GalleryGrid() {
         style={{ mixBlendMode: 'exclusion' }}
       >
         <span className="font-inter-tight font-medium text-[11px] lg:text-[13px] tracking-[-0.02em] uppercase text-white">
-          COOKIE PLANET (R) 2026
+          ANGELICA SHOP (R) 2026
         </span>
         <span className="font-inter-tight font-medium text-[11px] lg:text-[13px] tracking-[-0.02em] uppercase text-white">
           PRIVACY POLICY

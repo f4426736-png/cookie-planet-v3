@@ -20,7 +20,7 @@ export default function PrmptHeader({ onBackToHome }: PrmptHeaderProps) {
       >
         <div className="flex items-baseline gap-1">
           <span className="font-inter-tight tracking-[-0.05em] font-extrabold uppercase text-white text-[24px] sm:text-[34px] lg:text-[44px] leading-none">
-            Cookie Planet
+            Angelica Shop
           </span>
           <span className="font-inter-tight text-[11px] sm:text-[14px] lg:text-[18px] font-bold text-white tracking-tight">
             ®

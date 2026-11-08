@@ -65,7 +65,7 @@ export const CtaFaqFooterSection: React.FC<CtaFaqFooterSectionProps> = ({ onOrde
               >
                 ¿Listo para probar
                 <br />
-                Cookie Planet?
+                Angelica Shop?
               </h2>
               <p className="text-[0.95rem] mb-[30px] font-normal opacity-90 max-w-md">
                 Galletas artesanales recién horneadas con entrega a domicilio, mesas dulces y pedidos especiales.
@@ -95,7 +95,7 @@ export const CtaFaqFooterSection: React.FC<CtaFaqFooterSectionProps> = ({ onOrde
                   Preguntas Frecuentes
                 </span>
                 <h3 className="text-xl font-bold text-neutral-900 mt-1">
-                  Todo sobre Cookie Planet
+                  Todo sobre Angelica Shop
                 </h3>
               </div>
 

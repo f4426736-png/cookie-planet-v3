@@ -71,7 +71,7 @@ export default function AboutExperience({ onBackToHome, onOrderClick }: AboutExp
               id="aboutTitle"
               className="text-2xl sm:text-3xl md:text-4xl font-normal tracking-tight text-white mb-1.5"
             >
-              ¡Hola! Somos Cookie Planet.
+              ¡Hola! Somos Angelica Shop.
             </h2>
             <p
               id="aboutBio"
@@ -106,7 +106,7 @@ export default function AboutExperience({ onBackToHome, onOrderClick }: AboutExp
             ) : (
               <a
                 id="btnTeamUp"
-                href="https://wa.me/51987654321?text=Hola%20Cookie%20Planet!%20Quiero%20hacer%20un%20pedido"
+                href="https://wa.me/51987654321?text=Hola%20Angelica%20Shop!%20Quiero%20hacer%20un%20pedido"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="liquid-glass px-4 sm:px-5 py-2 sm:py-2.5 rounded-full inline-flex items-center gap-2 text-xs sm:text-[13px] font-medium text-white/90 hover:text-white transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg cursor-pointer shrink-0"
@@ -197,7 +197,7 @@ export default function AboutExperience({ onBackToHome, onOrderClick }: AboutExp
               </div>
 
               <div id="clientVoiceAuthor" className="mt-3.5 text-[11.5px] sm:text-xs text-white/75 relative z-10">
-                <span className="font-semibold text-white">Cliente Feliz</span> — Cookie Planet Lover
+                <span className="font-semibold text-white">Cliente Feliz</span> — Angelica Shop Lover
               </div>
             </div>
 
@@ -309,7 +309,7 @@ export default function AboutExperience({ onBackToHome, onOrderClick }: AboutExp
 
                 <a
                   id="btnReachMeArrow"
-                  href="https://wa.me/51987654321?text=Hola%20Cookie%20Planet!"
+                  href="https://wa.me/51987654321?text=Hola%20Angelica%20Shop!"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="h-8 w-8 sm:h-8.5 sm:w-8.5 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-200 flex items-center justify-center text-white cursor-pointer hover:scale-105 active:scale-95"
@@ -322,16 +322,16 @@ export default function AboutExperience({ onBackToHome, onOrderClick }: AboutExp
               <div className="relative z-10 flex flex-col gap-2 mt-3.5">
                 <a
                   id="linkReachEmail"
-                  href="mailto:pedidos@cookieplanet.pe"
+                  href="mailto:pedidos@angelicashop.pe"
                   className="inline-flex items-center gap-2 text-xs sm:text-[13px] font-medium text-white/90 hover:text-white transition-colors duration-200"
                 >
                   <Mail className="h-3.5 w-3.5 text-white/60" strokeWidth={1.5} />
-                  <span>pedidos@cookieplanet.pe</span>
+                  <span>pedidos@angelicashop.pe</span>
                 </a>
 
                 <a
                   id="linkReachPhone"
-                  href="https://wa.me/51987654321?text=Hola%20Cookie%20Planet!"
+                  href="https://wa.me/51987654321?text=Hola%20Angelica%20Shop!"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-xs sm:text-[13px] font-medium text-white/90 hover:text-white transition-colors duration-200"
@@ -342,7 +342,7 @@ export default function AboutExperience({ onBackToHome, onOrderClick }: AboutExp
 
                 <a
                   id="linkReachInstagram"
-                  href="https://instagram.com/cookieplanet.pe"
+                  href="https://instagram.com/angelicashop.pe"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-xs sm:text-[13px] font-medium text-white/90 hover:text-white transition-colors duration-200"
@@ -352,7 +352,7 @@ export default function AboutExperience({ onBackToHome, onOrderClick }: AboutExp
                     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
                     <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
                   </svg>
-                  <span>@cookieplanet.pe</span>
+                  <span>@angelicashop.pe</span>
                 </a>
               </div>
             </div>

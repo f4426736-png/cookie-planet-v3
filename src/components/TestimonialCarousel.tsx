@@ -23,7 +23,7 @@ const baseTestimonials: Testimonial[] = [
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=compress&cs=tinysrgb&w=150',
   },
   {
-    quote: 'La combinación con trozos crujientes de galleta negra y crema suave es espectacular. Mis favoritas definitivas de Cookie Planet.',
+    quote: 'La combinación con trozos crujientes de galleta negra y crema suave es espectacular. Mis favoritas definitivas de Angelica Shop.',
     name: 'Camila Vargas',
     role: 'Cliente frecuente',
     avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=compress&cs=tinysrgb&w=150',

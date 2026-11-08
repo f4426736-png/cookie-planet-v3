@@ -557,9 +557,9 @@ export default function App() {
         
         {/* Apple Style Hero Typography Block - Bottom Left (identical to Apple iPhone Pro image) */}
         <div className="absolute left-6 sm:left-12 md:left-16 lg:left-24 bottom-24 sm:bottom-28 md:bottom-32 z-20 max-w-3xl text-left pointer-events-auto">
-          {/* Main Monumental Headline: Solo Cookie Planet */}
+          {/* Main Monumental Headline: Solo Angelica Shop */}
           <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-[100px] font-bold tracking-[-0.035em] text-white leading-[1.0] drop-shadow-[0_4px_32px_rgba(0,0,0,0.9)]">
-            Cookie Planet
+            Angelica Shop
           </h1>
         </div>
 

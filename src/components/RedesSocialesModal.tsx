@@ -37,7 +37,7 @@ const SOCIAL_NETWORKS: SocialPlanetItem[] = [
     glow: 'rgba(255, 252, 0, 0.9)',
     bgColor: '#FFFC00',
     name: 'Snapchat',
-    handle: '@cookieplanetsnap',
+    handle: '@angelicashopsnap',
     url: 'https://snapchat.com',
     delay: 0.5,
     icon: (cls) => (
@@ -55,7 +55,7 @@ const SOCIAL_NETWORKS: SocialPlanetItem[] = [
     glow: 'rgba(225, 48, 108, 0.9)',
     bgColor: 'linear-gradient(135deg, #833AB4 0%, #FD1D1D 50%, #FCAF45 100%)',
     name: 'Instagram',
-    handle: '@cookieplanet',
+    handle: '@angelicashop',
     url: 'https://instagram.com',
     delay: 0.7,
     icon: (cls) => (
@@ -77,7 +77,7 @@ const SOCIAL_NETWORKS: SocialPlanetItem[] = [
     glow: 'rgba(0, 136, 204, 0.9)',
     bgColor: '#0088cc',
     name: 'Telegram',
-    handle: 't.me/cookieplanet',
+    handle: 't.me/angelicashop',
     url: 'https://telegram.org',
     delay: 0.85,
     icon: (cls) => (
@@ -95,7 +95,7 @@ const SOCIAL_NETWORKS: SocialPlanetItem[] = [
     glow: 'rgba(0, 242, 234, 0.9)',
     bgColor: '#000000',
     name: 'TikTok',
-    handle: '@cookieplanet.tok',
+    handle: '@angelicashop.tok',
     url: 'https://tiktok.com',
     delay: 1.0,
     icon: (cls) => (
@@ -113,7 +113,7 @@ const SOCIAL_NETWORKS: SocialPlanetItem[] = [
     glow: 'rgba(255, 0, 0, 0.9)',
     bgColor: '#FF0000',
     name: 'YouTube',
-    handle: 'Cookie Planet TV',
+    handle: 'Angelica Shop TV',
     url: 'https://youtube.com',
     delay: 1.15,
     icon: (cls) => (
@@ -151,7 +151,7 @@ const SOCIAL_NETWORKS: SocialPlanetItem[] = [
     glow: 'rgba(24, 119, 242, 0.9)',
     bgColor: '#1877F2',
     name: 'Facebook',
-    handle: 'Cookie Planet Oficial',
+    handle: 'Angelica Shop Oficial',
     url: 'https://facebook.com',
     delay: 1.4,
     icon: (cls) => (
@@ -187,7 +187,7 @@ const SOCIAL_NETWORKS: SocialPlanetItem[] = [
     glow: 'rgba(10, 102, 194, 0.9)',
     bgColor: '#0A66C2',
     name: 'LinkedIn',
-    handle: 'Cookie Planet Co.',
+    handle: 'Angelica Shop Co.',
     url: 'https://linkedin.com',
     delay: 1.7,
     icon: (cls) => (
@@ -207,7 +207,7 @@ const SOCIAL_NETWORKS: SocialPlanetItem[] = [
     glow: 'rgba(255, 255, 255, 0.9)',
     bgColor: '#000000',
     name: 'X (Twitter)',
-    handle: '@cookieplanet_x',
+    handle: '@angelicashop_x',
     url: 'https://twitter.com',
     delay: 1.8,
     icon: (cls) => (
@@ -243,7 +243,7 @@ const SOCIAL_NETWORKS: SocialPlanetItem[] = [
     glow: 'rgba(255, 69, 0, 0.9)',
     bgColor: '#FF4500',
     name: 'Reddit',
-    handle: 'r/cookieplanet',
+    handle: 'r/angelicashop',
     url: 'https://reddit.com',
     delay: 2.1,
     icon: (cls) => (
@@ -279,7 +279,7 @@ const SOCIAL_NETWORKS: SocialPlanetItem[] = [
     glow: 'rgba(160, 104, 255, 0.9)',
     bgColor: '#000000',
     name: 'Threads',
-    handle: '@cookieplanet.app',
+    handle: '@angelicashop.app',
     url: 'https://threads.net',
     delay: 2.3,
     icon: (cls) => (
@@ -319,7 +319,7 @@ const LOGOS = [
 ];
 
 const FULL_TEXT =
-  'Conéctate a la Galaxia Cookie Planet — ¡El hype, las recetas y drops exclusivos en un solo lugar!';
+  'Conéctate a la Galaxia Angelica Shop — ¡El hype, las recetas y drops exclusivos en un solo lugar!';
 const DARK_CHAR_COUNT = 38;
 
 export const RedesSocialesModal: React.FC<RedesSocialesModalProps> = ({
@@ -409,7 +409,7 @@ export const RedesSocialesModal: React.FC<RedesSocialesModalProps> = ({
         className="fixed top-5 right-5 z-50 bg-[#060218]/90 hover:bg-[#060218] border border-white/20 text-white px-4 py-2 rounded-full text-xs font-medium flex items-center gap-1.5 shadow-2xl backdrop-blur-md cursor-pointer transition-all hover:scale-105"
       >
         <X className="w-3.5 h-3.5 text-[#A068FF]" />
-        <span>Volver a Cookie Planet</span>
+        <span>Volver a Angelica Shop</span>
       </button>
 
       {/* Main Container */}
@@ -419,7 +419,7 @@ export const RedesSocialesModal: React.FC<RedesSocialesModalProps> = ({
           {/* Left: Brand + Nav Links */}
           <div className="flex items-center gap-6 md:gap-10">
             <a
-              href="#cookie-planet"
+              href="#angelica-shop"
               className="flex items-center gap-2.5 group cursor-pointer"
             >
               <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#A068FF] via-purple-400 to-amber-300 flex items-center justify-center shadow-[0_0_15px_rgba(160,104,255,0.6)]">
@@ -430,7 +430,7 @@ export const RedesSocialesModal: React.FC<RedesSocialesModalProps> = ({
                   style={{ fontFamily: "'Urbanist', sans-serif" }}
                   className="font-bold text-lg text-black tracking-tight"
                 >
-                  COOKIE PLANET
+                  ANGELICA SHOP
                 </span>
                 <span className="text-[10px] uppercase tracking-widest text-[#060218]/80 font-semibold -mt-1">
                   Social Space
@@ -482,7 +482,7 @@ export const RedesSocialesModal: React.FC<RedesSocialesModalProps> = ({
               >
                 <span className="absolute inset-0 bg-[#A068FF] -translate-x-full transition-transform duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0 -z-10" />
                 <span className="relative z-10 group-hover:text-black font-semibold transition-colors duration-200">
-                  Seguir @cookieplanet
+                  Seguir @angelicashop
                 </span>
                 <ChevronRight className="w-4 h-4 relative z-10 group-hover:text-black transition-colors" />
               </a>
@@ -559,7 +559,7 @@ export const RedesSocialesModal: React.FC<RedesSocialesModalProps> = ({
                 className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#A068FF] text-black font-semibold text-xs shadow-[0_0_20px_rgba(160,104,255,0.7)]"
               >
                 <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-                <span>@cookieplanet en vivo</span>
+                <span>@angelicashop en vivo</span>
               </motion.div>
             </div>
           </div>
@@ -818,7 +818,7 @@ export const RedesSocialesModal: React.FC<RedesSocialesModalProps> = ({
             className="fixed inset-0 z-50 bg-[#060218]/95 backdrop-blur-2xl p-6 flex flex-col justify-between"
           >
             <div className="flex items-center justify-between pb-6 border-b border-white/10">
-              <span className="font-bold text-xl text-white">Redes Cookie Planet</span>
+              <span className="font-bold text-xl text-white">Redes Angelica Shop</span>
               <button
                 onClick={() => setMobileMenuOpen(false)}
                 className="p-2 rounded-full bg-white/10 text-white"
@@ -829,9 +829,9 @@ export const RedesSocialesModal: React.FC<RedesSocialesModalProps> = ({
 
             <div className="flex flex-col gap-5 py-6 overflow-y-auto max-h-[70vh]">
               {[
-                { label: 'Instagram (@cookieplanet)', href: 'https://instagram.com' },
+                { label: 'Instagram (@angelicashop)', href: 'https://instagram.com' },
                 { label: 'TikTok (Recetas & Drops)', href: 'https://tiktok.com' },
-                { label: 'YouTube (Cookie Planet TV)', href: 'https://youtube.com' },
+                { label: 'YouTube (Angelica Shop TV)', href: 'https://youtube.com' },
                 { label: 'WhatsApp (Pedidos Express)', href: 'https://whatsapp.com' },
                 { label: 'Facebook (Página Oficial)', href: 'https://facebook.com' },
                 { label: 'Spotify (Baking Playlists)', href: 'https://spotify.com' },

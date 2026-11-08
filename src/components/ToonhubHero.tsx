@@ -141,12 +141,12 @@ export const ToonhubHero: React.FC<ToonhubHeroProps> = ({ onCookieClick }) => {
           COOKIES
         </div>
 
-        {/* 3. Top-left brand label "COOKIE PLANET • SABORES" */}
+        {/* 3. Top-left brand label "ANGELICA SHOP • SABORES" */}
         <div
           className="absolute top-6 left-4 sm:left-8 text-xs font-semibold uppercase text-white tracking-[0.18em]"
           style={{ zIndex: 60, opacity: 0.9 }}
         >
-          COOKIE PLANET • SABORES
+          ANGELICA SHOP • SABORES
         </div>
 
         {/* 4. Carousel */}

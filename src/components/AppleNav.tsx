@@ -151,7 +151,7 @@ export const AppleNav: React.FC<AppleNavProps> = ({
           >
             <img
               src="https://res.cloudinary.com/yxbhso8s/image/upload/v1790557694/LOGO_CONEJITO_DE_NJZ.png"
-              alt="Logo Conejito NJZ - Cookie Planet"
+              alt="Logo Conejito NJZ - Angelica Shop"
               className="h-5 w-auto object-contain filter drop-shadow-[0_1px_4px_rgba(255,255,255,0.2)] hover:scale-105 transition-transform duration-200"
             />
           </button>
